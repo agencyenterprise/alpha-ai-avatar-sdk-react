@@ -10,11 +10,11 @@ export const Avatar = ({ style, ...rest }: AvatarProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const avatarClient = useAvatarClient();
+  const { room } = useAvatarClient();
   useLiveKitRoom({
     videoRef,
     audioRef,
-    room: avatarClient.room,
+    room,
   });
 
   return (

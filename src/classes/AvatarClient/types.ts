@@ -1,6 +1,7 @@
 export declare type Config = {
   apiKey: string;
   baseUrl?: string;
+  avatarId?: number;
 };
 
 export declare type GetAvatars = {

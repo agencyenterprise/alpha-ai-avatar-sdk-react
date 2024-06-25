@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAvatarContext } from "../context/AvatarContext";
-import { RoomEvent } from "livekit-client";
+import { Room, RoomEvent } from "livekit-client";
 
 const encoder = new TextEncoder();
 
@@ -65,9 +65,28 @@ export const useAvatarClient = () => {
     room?.localParticipant?.publishData(data, { reliable: true });
   };
 
+  const getAvatars = () => {
+    return context.client.getAvatars();
+  };
+
   const disconnect = () => {
     setIsConnected(false);
     room?.disconnect();
+  };
+
+  const switchAvatar = (avatarId: number) => {
+    disconnect();
+    context.client.connect(avatarId).then((data) => {
+      const token = data.token;
+      const serverUrl = data.serverUrl;
+
+      const room = new Room({
+        adaptiveStream: true,
+      });
+      room.connect(serverUrl, token).then(() => {
+        context.updateRoom(room);
+      });
+    });
   };
 
   room
@@ -84,6 +103,8 @@ export const useAvatarClient = () => {
     isAvatarSpeaking,
     say,
     stop,
+    getAvatars,
+    switchAvatar,
     disconnect,
   };
 };

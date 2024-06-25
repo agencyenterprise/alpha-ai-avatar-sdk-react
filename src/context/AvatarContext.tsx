@@ -4,7 +4,6 @@ import {
   useEffect,
   ReactNode,
   useContext,
-  useRef,
 } from "react";
 import { AvatarClient } from "../classes/AvatarClient/AvatarClient";
 import { Room } from "livekit-client";
@@ -14,11 +13,13 @@ const AvatarContext = createContext<{
   token: string;
   serverUrl: string;
   room: Room | undefined;
+  updateRoom: (room: Room) => void;
 }>({
   client: new AvatarClient({ apiKey: "" }),
   token: "",
   serverUrl: "",
   room: undefined,
+  updateRoom: () => {},
 });
 
 type AvatarProviderType = {
@@ -27,9 +28,9 @@ type AvatarProviderType = {
 };
 
 const AvatarProvider: React.FC<AvatarProviderType> = ({ client, children }) => {
-  const roomRef = useRef<Room | undefined>();
   const [token, setToken] = useState("");
   const [serverUrl, setServerUrl] = useState("");
+  const [roomRef, setRoomRef] = useState<Room | undefined>();
 
   useEffect(() => {
     client.connect().then((data) => {
@@ -43,13 +44,21 @@ const AvatarProvider: React.FC<AvatarProviderType> = ({ client, children }) => {
         adaptiveStream: true,
       });
       room.connect(serverUrl, token);
-      roomRef.current = room;
+      setRoomRef(room);
     });
   }, []);
 
   return (
     <AvatarContext.Provider
-      value={{ client, token, serverUrl, room: roomRef.current }}
+      value={{
+        client,
+        token,
+        serverUrl,
+        room: roomRef,
+        updateRoom: (room) => {
+          setRoomRef(room);
+        },
+      }}
     >
       {children}
     </AvatarContext.Provider>

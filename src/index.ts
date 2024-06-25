@@ -1,7 +1,5 @@
-import { AvatarClient } from "./classes/AvatarClient/AvatarClient";
-
 // Classes
-export { AvatarClient };
+export { AvatarClient } from "./classes/AvatarClient/AvatarClient";
 
 // Context
 export { AvatarProvider } from "./context/AvatarContext";
