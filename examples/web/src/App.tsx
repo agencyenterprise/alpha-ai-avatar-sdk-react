@@ -31,7 +31,7 @@ const Button = ({ text, onClick }: { text: string; onClick: () => void }) => {
       type="button"
       onClick={onClick}
       style={{
-        backgroundColor: "#03A9F4",
+        backgroundColor: "#0288D1",
         padding: "10px 20px",
         color: "white",
         borderRadius: "5px",
