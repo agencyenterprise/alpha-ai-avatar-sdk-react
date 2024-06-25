@@ -1,5 +1,5 @@
 export abstract class Base {
-  protected invoke<T>(
+  protected async invoke<T>(
     url: string,
     apiKey: string,
     options: RequestInit = {}
@@ -10,11 +10,10 @@ export abstract class Base {
       ...options.headers,
     };
 
-    return fetch(url, { ...options, headers }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      return response.json();
-    });
+    const response = await fetch(url, { ...options, headers });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return await response.json();
   }
 }

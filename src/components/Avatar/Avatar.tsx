@@ -3,11 +3,10 @@ import { useAvatarClient } from "../../hooks/useAvatarClient";
 import { useLiveKitRoom } from "../../hooks/useLiveKitRoom";
 
 export type AvatarProps = {
-  token: string;
-  serverUrl: string;
+  style?: React.CSSProperties;
 };
 
-export const AvatarComponent = ({}: AvatarProps) => {
+export const Avatar = ({ style, ...rest }: AvatarProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -15,13 +14,12 @@ export const AvatarComponent = ({}: AvatarProps) => {
   useLiveKitRoom({
     videoRef,
     audioRef,
-    token: avatarClient.token,
-    serverUrl: avatarClient.serverUrl,
+    room: avatarClient.room,
   });
 
   return (
-    <div>
-      <video ref={videoRef} autoPlay playsInline muted />
+    <div {...rest}>
+      <video ref={videoRef} style={style} autoPlay playsInline muted />
       <audio ref={audioRef} className="hidden" autoPlay playsInline muted />
     </div>
   );

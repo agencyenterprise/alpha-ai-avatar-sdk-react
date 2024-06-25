@@ -1,4 +1,4 @@
-import { Base } from "../../base";
+import { Base } from "../base";
 import { Config, CreateRoom, GetAvatars } from "./types";
 
 export class AvatarClient extends Base {
