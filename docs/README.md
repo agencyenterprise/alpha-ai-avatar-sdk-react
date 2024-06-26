@@ -64,72 +64,61 @@ const client = useAvatarClient();
 - **`isConnected`**: Boolean indicating if the avatar is connected.
 - **`isAvatarSpeaking`**: Boolean indicating if the avatar is speaking.
 - **`sendMessage`**: Sends a message for the avatar to say with various options:
+
   - **`voiceName`**: Specify the voice name.
   - **`voiceStyle`**: Specify the voice style.
 
-#### Example for Sending a Message
-
-```javascript
-client.sendMessage('Hello, World!', {
-  voiceName: 'en-US-DavisNeural',
-  voiceStyle: 'angry',
-});
-```
+    ```javascript
+    client.sendMessage('Hello, World!', {
+      voiceName: 'en-US-DavisNeural',
+      voiceStyle: 'angry',
+    });
+    ```
 
 - **`multilingualLang`**: To use a language other than English, ensure the `voiceName` supports multilingual and specify the language.
 
-#### Example for Multilingual Message
-
-```javascript
-client.sendMessage('Hello, World!', {
-  voiceName: 'en-US-AndrewMultilingualNeural',
-  multilingualLang: 'es-ES',
-});
-```
+  ```javascript
+  client.sendMessage('Hello, World!', {
+    voiceName: 'en-US-AndrewMultilingualNeural',
+    multilingualLang: 'es-ES',
+  });
+  ```
 
 - **`prosody`**: Configure pitch, contour, range, rate, and volume for text-to-speech output. Refer to [Azure documentation](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-synthesis-markup-voice#adjust-prosody) for possible values.
 
-#### Example for Prosody Configuration
-
-```javascript
-client.sendMessage('Hello, World!', {
-  voiceName: 'en-US-AndrewMultilingualNeural',
-  prosody: {
-    contour: '(0%, 20Hz) (10%,-2st) (40%, 10Hz)',
-    pitch: 'high',
-    range: '50%',
-    rate: 'x-fast',
-    volume: 'loud',
-  },
-});
-```
+  ```javascript
+  client.sendMessage('Hello, World!', {
+    voiceName: 'en-US-AndrewMultilingualNeural',
+    prosody: {
+      contour: '(0%, 20Hz) (10%,-2st) (40%, 10Hz)',
+      pitch: 'high',
+      range: '50%',
+      rate: 'x-fast',
+      volume: 'loud',
+    },
+  });
+  ```
 
 - **`ssmlVoiceConfig`**: Allows for comprehensive SSML `voice` element configuration, including math, pauses, and silence.
 
-#### Example for SSML Voice Configuration
-
-```javascript
-client.sendMessage('', {
-  multilingualLang: 'en-US',
-  ssmlVoiceConfig:
-    "<voice name='en-US-AndrewMultilingualNeural'><mstts:express-as style='angry'><mstts:viseme type='FacialExpression'>Hello, World!</mstts:viseme></mstts:express-as></voice>",
-});
-```
+  ```javascript
+  client.sendMessage('', {
+    multilingualLang: 'en-US',
+    ssmlVoiceConfig:
+      "<voice name='en-US-AndrewMultilingualNeural'><mstts:express-as style='angry'><mstts:viseme type='FacialExpression'>Hello, World!</mstts:viseme></mstts:express-as></voice>",
+  });
+  ```
 
 - **`stop`**: Interrupts the avatar from speaking.
 
-#### Example for Stopping Speech
-
-```javascript
-client.stop();
-```
+  ```javascript
+  client.stop();
+  ```
 
 - **`switchAvatar`**: Switch to a different avatar available to your API Key.
 
-#### Example for Switching Avatar
-
-```javascript
-client.switchAvatar(2);
-```
+  ```javascript
+  client.switchAvatar(2);
+  ```
 
 - **`disconnect`**: Disconnect the avatar.
