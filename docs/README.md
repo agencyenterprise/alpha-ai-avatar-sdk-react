@@ -48,17 +48,15 @@ const client = useAvatarClient();
 
 - **`room`**: Instance of the LiveKit room. Provides access to room callbacks.
 - **`client`**: API for available routes:
+
   - **`connect`**: Connect to the room.
   - **`getAvatars`**: Retrieve all avatars available to your API Key.
   - **`getSupportedVoices`**: Retrieve all supported voices in English from Azure.
-
-#### Example for Getting Supported Voices
-
-```javascript
-client.client.getSupportedVoices().then((voices) => {
-  console.log(voices);
-});
-```
+    ```javascript
+    client.client.getSupportedVoices().then((voices) => {
+      console.log(voices);
+    });
+    ```
 
 - **`token`**: Token generated for your room.
 - **`serverUrl`**: Server URL generated for your room.
