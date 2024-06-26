@@ -1,6 +1,6 @@
 # Avatar SDK Functions Documentation
 
-This updated documentation aims to improve readability and provide a clear structure for users to easily understand and implement the Avatar SDK functionalities.
+This documentation aims to provide a clear structure for users to easily understand and implement the Avatar SDK functionalities.
 
 ## Avatar Client
 
@@ -47,7 +47,7 @@ const client = useAvatarClient();
 ### Properties and Methods
 
 - **`room`**: Instance of the LiveKit room. Provides access to room callbacks.
-- **`client`**: API for available routes:
+- **`client`**: Core API for available routes.
 
   - **`connect`**: Connect to the room.
   - **`getAvatars`**: Retrieve all avatars available to your API Key.
@@ -75,39 +75,39 @@ const client = useAvatarClient();
     });
     ```
 
-- **`multilingualLang`**: To use a language other than English, ensure the `voiceName` supports multilingual and specify the language.
+  - **`multilingualLang`**: To use a language other than English, ensure the `voiceName` supports multilingual and specify the language.
 
-  ```javascript
-  client.sendMessage('Hello, World!', {
-    voiceName: 'en-US-AndrewMultilingualNeural',
-    multilingualLang: 'es-ES',
-  });
-  ```
+    ```javascript
+    client.sendMessage('Hello, World!', {
+      voiceName: 'en-US-AndrewMultilingualNeural',
+      multilingualLang: 'es-ES',
+    });
+    ```
 
-- **`prosody`**: Configure pitch, contour, range, rate, and volume for text-to-speech output. Refer to [Azure documentation](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-synthesis-markup-voice#adjust-prosody) for possible values.
+  - **`prosody`**: Configure pitch, contour, range, rate, and volume for text-to-speech output. Refer to [Azure documentation](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-synthesis-markup-voice#adjust-prosody) for possible values.
 
-  ```javascript
-  client.sendMessage('Hello, World!', {
-    voiceName: 'en-US-AndrewMultilingualNeural',
-    prosody: {
-      contour: '(0%, 20Hz) (10%,-2st) (40%, 10Hz)',
-      pitch: 'high',
-      range: '50%',
-      rate: 'x-fast',
-      volume: 'loud',
-    },
-  });
-  ```
+    ```javascript
+    client.sendMessage('Hello, World!', {
+      voiceName: 'en-US-AndrewMultilingualNeural',
+      prosody: {
+        contour: '(0%, 20Hz) (10%,-2st) (40%, 10Hz)',
+        pitch: 'high',
+        range: '50%',
+        rate: 'x-fast',
+        volume: 'loud',
+      },
+    });
+    ```
 
-- **`ssmlVoiceConfig`**: Allows for comprehensive SSML `voice` element configuration, including math, pauses, and silence.
+  - **`ssmlVoiceConfig`**: Allows for comprehensive SSML `voice` element configuration, including math, pauses, and silence.
 
-  ```javascript
-  client.sendMessage('', {
-    multilingualLang: 'en-US',
-    ssmlVoiceConfig:
-      "<voice name='en-US-AndrewMultilingualNeural'><mstts:express-as style='angry'><mstts:viseme type='FacialExpression'>Hello, World!</mstts:viseme></mstts:express-as></voice>",
-  });
-  ```
+    ```javascript
+    client.sendMessage('', {
+      multilingualLang: 'en-US',
+      ssmlVoiceConfig:
+        "<voice name='en-US-AndrewMultilingualNeural'><mstts:express-as style='angry'><mstts:viseme type='FacialExpression'>Hello, World!</mstts:viseme></mstts:express-as></voice>",
+    });
+    ```
 
 - **`stop`**: Interrupts the avatar from speaking.
 

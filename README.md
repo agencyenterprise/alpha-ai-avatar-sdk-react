@@ -13,6 +13,7 @@ Hello! 👋 This tutorial will help you get started with the **Avatar SDK for Re
     - [Integrating with React](#integrating-with-react)
     - [Using Avatar Components](#using-avatar-components)
   - [Examples](#examples)
+  - [Documentation](#documentation)
 
 ## Installation
 
@@ -111,6 +112,10 @@ export default App;
 ## Examples
 
 You can find a simple example application in the `examples` folder of the library. This example demonstrates how to configure and use the SDK in a React project.
+
+## Documentation
+
+For a detailed overview of all supported configurations, please refer to our comprehensive [documentation](docs/).
 
 ---
 
