@@ -1,80 +1,97 @@
 # Getting Started
 
-Hello! 👋 This short tutorial gets you up and running with Avatar SDK (React)
+Hello! 👋 This tutorial will help you get started with the **Avatar SDK for React**.
 
-## Installation (Soon)
+## Table of Contents
 
-Run the following command to install the package:
+- [Getting Started](#getting-started)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Importing and Initializing](#importing-and-initializing)
+    - [Integrating with React](#integrating-with-react)
+    - [Using Avatar Components](#using-avatar-components)
+    - [Available Options](#available-options)
+  - [Examples](#examples)
+
+## Installation
+
+**Note: Installation will be available soon.**
+
+To install the package, run the following command:
 
 ```bash
 npm i alpha-ai-avatar-sdk-react
 ```
 
-## How to use
+## Usage
 
-With our dependency set up, we can now initialize an AvatarClient instance.
+### Importing and Initializing
 
-In `index.jsx`, let's first import the symbols we need from `alpha-ai-avatar-sdk-react`:
+To get started, initialize an `AvatarClient` instance. First, import the necessary components from the SDK in your `index.jsx`:
 
 ```javascript
-import { AvatarProvider, AvatarClient } from "alpha-ai-avatar-sdk-react";
+import { AvatarProvider, AvatarClient } from 'alpha-ai-avatar-sdk-react';
 ```
 
-Next we'll initialize AvatarClient, passing its constructor a configuration object with the apiKey:
+Next, initialize `AvatarClient` with your configuration. Replace `"YOUR_API_KEY"` with the API key provided by our team:
 
 ```javascript
 const client = new AvatarClient({
-  apiKey: "YOUR_API_KEY",
+  apiKey: 'YOUR_API_KEY',
+  // Optional: Customize base URL for staging
+  baseUrl: 'https://staging.avatar.alpha.school',
+  // Optional: Pre-select an avatar by ID
+  avatarId: 1,
 });
 ```
 
-- `apiKey` is provided by our team to you.
-- `baseUrl` in case you want to use staging for testing purposes.
-- `avatarId` if you want to initialize with an specific avatar.
+### Integrating with React
 
-Let's wrap our React app with an `AvatarProvider`. We suggest putting the `AvatarProvider` somewhere high in your app, above any component that might need to access the avatar data.
+Wrap your React app with `AvatarProvider` to ensure all components can access the avatar data. This is typically done in your `index.jsx`:
 
 ```javascript
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { AvatarProvider, AvatarClient } from "alpha-ai-avatar-sdk-react";
-import App from "./App";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { AvatarProvider, AvatarClient } from 'alpha-ai-avatar-sdk-react';
+import App from './App';
 
 const client = new AvatarClient({
-  apiKey: "YOUR_API_KEY",
+  apiKey: 'YOUR_API_KEY',
 });
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
-
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AvatarProvider client={client}>
     <App />
-  </AvatarProvider>
+  </AvatarProvider>,
 );
 ```
 
-In your `App.tsx` call the `Avatar` component and `useAvatarClient` hook to access all the features available.
+### Using Avatar Components
+
+In your main app component (`App.tsx`), you can use the `Avatar` component and `useAvatarClient` hook to interact with the avatar:
 
 ```javascript
-import { Avatar, useAvatarClient } from "alpha-ai-avatar-sdk-react";
+import { Avatar, useAvatarClient } from 'alpha-ai-avatar-sdk-react';
 
 function App() {
   const client = useAvatarClient();
 
   return (
     <div>
-      <Avatar style={{ borderRadius: "20px", width: 250, height: 250 }} />
+      <Avatar style={{ borderRadius: '20px', width: 250, height: 250 }} />
 
-      <div style={{ display: "flex", gap: "10px" }}>
-        <button type="button" onClick={() => client.say("Hello, how are you?")}>
-          Say
+      <div style={{ display: 'flex', gap: '10px' }}>
+        <button
+          type='button'
+          onClick={() => client.sendMessage('Hello, how are you?')}>
+          Send Message
         </button>
-        <button type="button" onClick={() => client.stop()}>
+        <button type='button' onClick={() => client.stop()}>
           Stop Avatar
         </button>
-        <button type="button" onClick={() => client.switchAvatar(4)}>
+        <button type='button' onClick={() => client.switchAvatar(4)}>
           Switch Avatar
         </button>
       </div>
@@ -85,8 +102,18 @@ function App() {
 export default App;
 ```
 
-Congrats, you just made your first component that renders an Avatar! 🎉 Now you can try building more components with an Avatar and experiment with the concepts you just learned.
+### Available Options
+
+- `apiKey` (required): Your API key for authentication.
+- `baseUrl` (optional): URL for using a staging environment. Default is the production URL.
+- `avatarId` (optional): ID of the avatar to initialize.
 
 ## Examples
 
-In the examples folder you can find a simple React application that has the library configured.
+You can find a simple example application in the `examples` folder of the library. This example demonstrates how to configure and use the SDK in a React project.
+
+---
+
+**Note:** Always ensure you keep your API key secure and do not expose it in publicly accessible code.
+
+Congratulations! You have successfully integrated the Avatar SDK into your React app. 🎉 Feel free to experiment and build more complex components with avatars.

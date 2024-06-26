@@ -1,11 +1,11 @@
 // Classes
-export { AvatarClient } from "./classes/AvatarClient/AvatarClient";
+export { AvatarClient } from './core/AvatarClient/AvatarClient';
 
 // Context
-export { AvatarProvider } from "./context/AvatarContext";
+export { AvatarProvider } from './contexts/AvatarContext';
 
 // Hooks
-export { useAvatarClient } from "./hooks/useAvatarClient";
+export { useAvatarClient } from './hooks/useAvatarClient';
 
 // Components
-export * from "./components/Avatar/Avatar";
+export * from './components/Avatar/Avatar';

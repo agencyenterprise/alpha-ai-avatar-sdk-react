@@ -4,32 +4,32 @@ import {
   useEffect,
   ReactNode,
   useContext,
-} from "react";
-import { AvatarClient } from "../classes/AvatarClient/AvatarClient";
-import { Room } from "livekit-client";
+} from 'react';
+import { AvatarClient } from '../core/AvatarClient/AvatarClient';
+import { Room } from 'livekit-client';
 
 const AvatarContext = createContext<{
-  client: AvatarClient;
   token: string;
   serverUrl: string;
+  client: AvatarClient;
   room: Room | undefined;
   updateRoom: (room: Room) => void;
 }>({
-  client: new AvatarClient({ apiKey: "" }),
-  token: "",
-  serverUrl: "",
+  token: '',
+  serverUrl: '',
+  client: new AvatarClient({ apiKey: '' }),
   room: undefined,
   updateRoom: () => {},
 });
 
 type AvatarProviderType = {
-  client: AvatarClient;
   children: ReactNode;
+  client: AvatarClient;
 };
 
-const AvatarProvider: React.FC<AvatarProviderType> = ({ client, children }) => {
-  const [token, setToken] = useState("");
-  const [serverUrl, setServerUrl] = useState("");
+const AvatarProvider: React.FC<AvatarProviderType> = ({ children, client }) => {
+  const [token, setToken] = useState('');
+  const [serverUrl, setServerUrl] = useState('');
   const [roomRef, setRoomRef] = useState<Room | undefined>();
 
   useEffect(() => {
@@ -51,15 +51,14 @@ const AvatarProvider: React.FC<AvatarProviderType> = ({ client, children }) => {
   return (
     <AvatarContext.Provider
       value={{
-        client,
         token,
         serverUrl,
+        client,
         room: roomRef,
         updateRoom: (room) => {
           setRoomRef(room);
         },
-      }}
-    >
+      }}>
       {children}
     </AvatarContext.Provider>
   );
@@ -69,7 +68,7 @@ const useAvatarContext = () => {
   const context = useContext(AvatarContext);
 
   if (context === undefined) {
-    throw new Error("useUserContext was used outside of its Provider");
+    throw new Error('useUserContext was used outside of its Provider');
   }
 
   return context;

@@ -1,12 +1,17 @@
 export abstract class Base {
+  private apiKey: string | undefined;
+
   protected async invoke<T>(
     url: string,
-    apiKey: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<T> {
+    if (!this.apiKey) {
+      throw new Error('API Key not set');
+    }
+
     const headers = {
-      "Content-Type": "application/json",
-      "X-API-Key": apiKey,
+      'Content-Type': 'application/json',
+      'X-API-Key': this.apiKey,
       ...options.headers,
     };
 
@@ -15,5 +20,9 @@ export abstract class Base {
       throw new Error(response.statusText);
     }
     return await response.json();
+  }
+
+  setApiKey(apiKey: string): void {
+    this.apiKey = apiKey;
   }
 }

@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { useAvatarContext } from "../context/AvatarContext";
-import { Room, RoomEvent } from "livekit-client";
-
-const encoder = new TextEncoder();
+import { useState } from 'react';
+import { useAvatarContext } from '../contexts/AvatarContext';
+import { Room, RoomEvent } from 'livekit-client';
 
 enum MessageState {
   Idle = 0,
@@ -25,6 +23,22 @@ type ParsedMessage = {
   type: MessageType;
 };
 
+type SendMessageOptions = {
+  voiceName?: string;
+  voiceStyle?: string;
+  multilingualLang?: string;
+  prosody?: {
+    contour?: string;
+    pitch?: string;
+    range?: string;
+    rate?: string;
+    volume?: string;
+  };
+  ssmlVoiceConfig?: string; // Beta
+};
+
+const encoder = new TextEncoder();
+
 export const useAvatarClient = () => {
   const context = useAvatarContext();
 
@@ -33,11 +47,12 @@ export const useAvatarClient = () => {
 
   const room = context.room;
   const token = context.token;
+  const client = context.client;
   const serverUrl = context.serverUrl;
 
   const handleDataReceived = (data: Uint8Array) => {
     const parsedMessage: ParsedMessage = JSON.parse(
-      new TextDecoder().decode(data)
+      new TextDecoder().decode(data),
     );
 
     if (parsedMessage.type === MessageType.State) {
@@ -49,29 +64,20 @@ export const useAvatarClient = () => {
     }
 
     if (parsedMessage.type === MessageType.Error) {
-      throw new Error("Error from server");
+      throw new Error('Error from server');
     }
   };
 
-  const say = (message: string) => {
-    const data = encoder.encode(JSON.stringify({ message }));
+  const sendMessage = (message: string, options?: SendMessageOptions) => {
+    const data = encoder.encode(JSON.stringify({ message, ...options }));
     room?.localParticipant?.publishData(data, { reliable: true });
   };
 
   const stop = () => {
     const data = encoder.encode(
-      JSON.stringify({ message: "", avatarAction: 1 })
+      JSON.stringify({ message: '', avatarAction: 1 }),
     );
     room?.localParticipant?.publishData(data, { reliable: true });
-  };
-
-  const getAvatars = () => {
-    return context.client.getAvatars();
-  };
-
-  const disconnect = () => {
-    setIsConnected(false);
-    room?.disconnect();
   };
 
   const switchAvatar = (avatarId: number) => {
@@ -89,21 +95,29 @@ export const useAvatarClient = () => {
     });
   };
 
+  const disconnect = () => {
+    setIsConnected(false);
+    room?.disconnect();
+  };
+
   room
     ?.on(RoomEvent.Connected, () => {
       setIsConnected(true);
     })
-    .on(RoomEvent.DataReceived, handleDataReceived);
+    .on(RoomEvent.DataReceived, handleDataReceived)
+    .on(RoomEvent.Disconnected, () => {
+      setIsConnected(false);
+    });
 
   return {
     room,
+    client,
     token,
     serverUrl,
     isConnected,
     isAvatarSpeaking,
-    say,
+    sendMessage,
     stop,
-    getAvatars,
     switchAvatar,
     disconnect,
   };

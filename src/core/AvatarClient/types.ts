@@ -14,3 +14,12 @@ export declare type CreateRoom = {
   token: string;
   serverUrl: string;
 };
+
+export declare type GetSupportedVoices = {
+  displayName: string;
+  shortName: string;
+  gender: string;
+  locale: string;
+  styleList: string[];
+  wordsPerMinute: string;
+};

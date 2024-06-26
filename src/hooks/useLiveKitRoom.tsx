@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { Room, RoomEvent, Track } from "livekit-client";
+import { useEffect } from 'react';
+import { Room, RoomEvent, Track } from 'livekit-client';
 
-import type { RemoteTrack } from "livekit-client";
+import type { RemoteTrack } from 'livekit-client';
 
 export type UseLiveKitRoomOptions = {
   room: Room | undefined;
