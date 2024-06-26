@@ -52,6 +52,7 @@ const client = useAvatarClient();
   - **`connect`**: Connect to the room.
   - **`getAvatars`**: Retrieve all avatars available to your API Key.
   - **`getSupportedVoices`**: Retrieve all supported voices in English from Azure.
+
     ```javascript
     client.client.getSupportedVoices().then((voices) => {
       console.log(voices);
