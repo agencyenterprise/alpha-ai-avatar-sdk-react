@@ -9,9 +9,9 @@ Hello! 👋 This tutorial will help you get started with the **Avatar SDK for Re
   - [Installation](#installation)
   - [Usage](#usage)
     - [Importing and Initializing](#importing-and-initializing)
+      - [Available Options](#available-options)
     - [Integrating with React](#integrating-with-react)
     - [Using Avatar Components](#using-avatar-components)
-    - [Available Options](#available-options)
   - [Examples](#examples)
 
 ## Installation
@@ -45,6 +45,12 @@ const client = new AvatarClient({
   avatarId: 1,
 });
 ```
+
+#### Available Options
+
+- `apiKey` (required): Your API key for authentication.
+- `baseUrl` (optional): URL for using a staging environment. Default is the production URL.
+- `avatarId` (optional): ID of the avatar to initialize.
 
 ### Integrating with React
 
@@ -101,12 +107,6 @@ function App() {
 
 export default App;
 ```
-
-### Available Options
-
-- `apiKey` (required): Your API key for authentication.
-- `baseUrl` (optional): URL for using a staging environment. Default is the production URL.
-- `avatarId` (optional): ID of the avatar to initialize.
 
 ## Examples
 
