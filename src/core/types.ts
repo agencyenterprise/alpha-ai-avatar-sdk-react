@@ -1,21 +1,21 @@
-export declare type Config = {
+export declare type AvatarClientConfig = {
   apiKey: string;
   baseUrl?: string;
   avatarId?: number;
 };
 
-export declare type GetAvatars = {
+export declare type GetAvatarsResponse = {
   id: number;
   name: string;
   thumbnail: string;
-};
+}[];
 
-export declare type CreateRoom = {
+export declare type CreateRoomResponse = {
   token: string;
   serverUrl: string;
 };
 
-export declare type GetSupportedVoices = {
+export declare type GetSupportedVoicesResponse = {
   displayName: string;
   shortName: string;
   gender: string;
