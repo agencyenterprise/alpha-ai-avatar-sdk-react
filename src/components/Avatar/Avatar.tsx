@@ -2,15 +2,14 @@ import { useRef } from 'react';
 import { useAvatarClient } from '../../hooks/useAvatarClient';
 import { useLiveKitRoom } from '../../hooks/useLiveKitRoom';
 
-export type AvatarProps = {
-  style?: React.CSSProperties;
-};
+export type AvatarProps = React.ComponentPropsWithoutRef<'video'>;
 
-export const Avatar = ({ style, ...rest }: AvatarProps) => {
+export function Avatar(rest: AvatarProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const { room } = useAvatarClient();
+
   useLiveKitRoom({
     videoRef,
     audioRef,
@@ -18,9 +17,9 @@ export const Avatar = ({ style, ...rest }: AvatarProps) => {
   });
 
   return (
-    <div {...rest}>
-      <video ref={videoRef} style={style} autoPlay playsInline muted />
+    <>
+      <video ref={videoRef} autoPlay playsInline muted {...rest} />
       <audio ref={audioRef} className='hidden' autoPlay playsInline muted />
-    </div>
+    </>
   );
 };
