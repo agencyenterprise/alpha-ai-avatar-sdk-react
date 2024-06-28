@@ -12,7 +12,6 @@ To create an instance of the `AvatarClient`, use the following code:
 const client = new AvatarClient({
   apiKey: 'YOUR_API_KEY', // Required: Your API key for authentication.
   baseUrl: 'https://staging.avatar.alpha.school', // Optional: Customize base URL for staging (default is the production URL).
-  avatarId: 1, // Optional: Pre-select an avatar by ID.
 });
 ```
 
@@ -20,7 +19,18 @@ const client = new AvatarClient({
 
 - **`apiKey`** (required): Your API key for authentication.
 - **`baseUrl`** (optional): URL for the staging environment. Defaults to the production URL.
-- **`avatarId`** (optional): ID of the avatar to initialize.
+
+### Methods
+
+- **`connect`**: Connect to the room.
+- **`getAvatars`**: Retrieve all avatars available to your API Key.
+- **`getSupportedVoices`**: Retrieve all supported voices in English from Azure.
+
+  ```javascript
+  client.getSupportedVoices().then((voices) => {
+    console.log(voices);
+  });
+  ```
 
 ## Avatar Component
 
@@ -32,44 +42,43 @@ To display an avatar, use the `Avatar` component:
 
 ### Available Options
 
-- **`style`** (optional): Custom styles for the avatar video component.
+The `Avatar` component forwards all received props to the underlying `video` element. These are the ones you'll most likely use:
 
-## Avatar Client Hook
+- **`style`**: Custom styles for the avatar.
+- **`className`**: Custom class name for the avatar.
+
+## Avatar Hook
 
 ### Usage
 
-The `useAvatarClient` hook provides access to various client functionalities:
+The `useAvatar` hook provides access to various states and functionalities:
 
 ```javascript
-const client = useAvatarClient();
+const avatar = useAvatar();
 ```
 
-### Properties and Methods
+### States
 
 - **`room`**: Instance of the LiveKit room. Provides access to room callbacks.
-- **`client`**: Core API for available routes.
-
-  - **`connect`**: Connect to the room.
-  - **`getAvatars`**: Retrieve all avatars available to your API Key.
-  - **`getSupportedVoices`**: Retrieve all supported voices in English from Azure.
-
-    ```javascript
-    client.client.getSupportedVoices().then((voices) => {
-      console.log(voices);
-    });
-    ```
-
-- **`token`**: Token generated for your room.
-- **`serverUrl`**: Server URL generated for your room.
+- **`client`**: The same [`AvatarClient`](#avatar-client) instance you passed to the `AvatarProvider`.
 - **`isConnected`**: Boolean indicating if the avatar is connected.
 - **`isAvatarSpeaking`**: Boolean indicating if the avatar is speaking.
-- **`sendMessage`**: Sends a message for the avatar to say with various options:
+
+### Methods
+
+- **`connect`**: Connect to the room.
+
+    ```javascript
+    avatar.connect(); // Optional: pass the avatar id to connect to a specific avatar.
+    ```
+
+- **`say`**: Makes the avatar say what you want with various options:
 
   - **`voiceName`**: Specify the voice name.
   - **`voiceStyle`**: Specify the voice style.
 
     ```javascript
-    client.sendMessage('Hello, World!', {
+    avatar.say('Hello, World!', {
       voiceName: 'en-US-DavisNeural',
       voiceStyle: 'angry',
     });
@@ -78,7 +87,7 @@ const client = useAvatarClient();
   - **`multilingualLang`**: To use a language other than English, ensure the `voiceName` supports multilingual and specify the language.
 
     ```javascript
-    client.sendMessage('Hello, World!', {
+    avatar.say('Hello, World!', {
       voiceName: 'en-US-AndrewMultilingualNeural',
       multilingualLang: 'es-ES',
     });
