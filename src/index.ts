@@ -8,7 +8,7 @@ export { AvatarClient } from './core/AvatarClient';
 export { AvatarProvider } from './contexts/AvatarContext';
 
 // Hooks
-export { useAvatarClient } from './hooks/useAvatarClient';
+export { useAvatar } from './hooks/useAvatar';
 
 // Components
 export * from './components/Avatar/Avatar';

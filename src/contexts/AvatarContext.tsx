@@ -1,77 +1,154 @@
-import {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  useContext,
-} from 'react';
-import { AvatarClient } from '../core/AvatarClient/AvatarClient';
-import { Room } from 'livekit-client';
+import { Room, RoomEvent } from 'livekit-client';
+import { ReactNode, createContext, useState } from 'react';
+import { AvatarClient } from '../core/AvatarClient';
+
+enum MessageState {
+  Idle = 0,
+  Loading = 1,
+  Speaking = 2,
+  Active = 3,
+}
+
+enum MessageType {
+  Transcript = 0,
+  State = 1,
+  Error = 2,
+}
+
+type Message = {
+  data: {
+    message: string;
+    state: MessageState;
+  };
+  type: MessageType;
+};
+
+type SayOptions = {
+  voiceName?: string;
+  voiceStyle?: string;
+  multilingualLang?: string;
+  prosody?: {
+    contour?: string;
+    pitch?: string;
+    range?: string;
+    rate?: string;
+    volume?: string;
+  };
+  ssmlVoiceConfig?: string; // Beta
+};
+
+const encoder = new TextEncoder();
 
 const AvatarContext = createContext<{
-  token: string;
-  serverUrl: string;
   client: AvatarClient;
-  room: Room | undefined;
-  updateRoom: (room: Room) => void;
+  room?: Room;
+  isConnected: boolean;
+  isAvatarSpeaking: boolean;
+  connect: (avatarId?: number) => Promise<void>;
+  say: (message: string, options?: SayOptions) => Promise<void>;
+  stop: () => Promise<void>;
+  switchAvatar: (avatarId: number) => Promise<void>;
+  disconnect: () => Promise<void>;
 }>({
-  token: '',
-  serverUrl: '',
   client: new AvatarClient({ apiKey: '' }),
   room: undefined,
-  updateRoom: () => {},
+  isConnected: false,
+  isAvatarSpeaking: false,
+  connect: () => Promise.resolve(),
+  say: () => Promise.resolve(),
+  stop: () => Promise.resolve(),
+  switchAvatar: () => Promise.resolve(),
+  disconnect: () => Promise.resolve(),
 });
 
-type AvatarProviderType = {
+type AvatarProviderProps = {
   children: ReactNode;
   client: AvatarClient;
 };
 
-const AvatarProvider: React.FC<AvatarProviderType> = ({ children, client }) => {
-  const [token, setToken] = useState('');
-  const [serverUrl, setServerUrl] = useState('');
-  const [roomRef, setRoomRef] = useState<Room | undefined>();
+function AvatarProvider({ children, client }: AvatarProviderProps) {
+  const [room, setRoom] = useState<Room>();
+  const [isConnected, setIsConnected] = useState(false);
+  const [isAvatarSpeaking, setIsAvatarSpeaking] = useState(false);
 
-  useEffect(() => {
-    client.connect().then((data) => {
-      const token = data.token;
-      const serverUrl = data.serverUrl;
+  function handleDataReceived(data: Uint8Array) {
+    const parsedMessage: Message = JSON.parse(new TextDecoder().decode(data));
 
-      setToken(token);
-      setServerUrl(serverUrl);
+    if (parsedMessage.type === MessageType.State) {
+      if (parsedMessage.data.state === MessageState.Speaking) {
+        setIsAvatarSpeaking(true);
+      } else {
+        setIsAvatarSpeaking(false);
+      }
+    }
 
-      const room = new Room({
-        adaptiveStream: true,
+    if (parsedMessage.type === MessageType.Error) {
+      throw new Error('Error from server');
+    }
+  }
+
+  async function connect(avatarId?: number) {
+    if (room && room.state !== 'disconnected') {
+      return;
+    }
+
+    const newRoom = new Room({ adaptiveStream: true });
+
+    newRoom
+      .on(RoomEvent.Connected, () => {
+        setIsConnected(true);
+      })
+      .on(RoomEvent.DataReceived, handleDataReceived)
+      .on(RoomEvent.Disconnected, () => {
+        setIsConnected(false);
       });
-      room.connect(serverUrl, token);
-      setRoomRef(room);
-    });
-  }, []);
+
+    setRoom(newRoom);
+
+    const { token, serverUrl } = await client.connect(avatarId);
+
+    newRoom.connect(serverUrl, token);
+  }
+
+  async function sendMessage(message: any) {
+    const data = encoder.encode(JSON.stringify(message));
+    await room?.localParticipant?.publishData(data, { reliable: true });
+  }
+
+  async function say(message: string, options?: SayOptions) {
+    await sendMessage({ message, ...options });
+  }
+
+  async function stop() {
+    await sendMessage({ message: '', avatarAction: 1 });
+  }
+
+  async function switchAvatar(avatarId: number) {
+    await disconnect();
+    await connect(avatarId);
+  }
+
+  async function disconnect() {
+    await room?.disconnect();
+    setRoom(undefined);
+  }
 
   return (
     <AvatarContext.Provider
       value={{
-        token,
-        serverUrl,
         client,
-        room: roomRef,
-        updateRoom: (room) => {
-          setRoomRef(room);
-        },
+        room,
+        isConnected,
+        isAvatarSpeaking,
+        connect,
+        say,
+        stop,
+        switchAvatar,
+        disconnect,
       }}>
       {children}
     </AvatarContext.Provider>
   );
-};
+}
 
-const useAvatarContext = () => {
-  const context = useContext(AvatarContext);
-
-  if (context === undefined) {
-    throw new Error('useUserContext was used outside of its Provider');
-  }
-
-  return context;
-};
-
-export { AvatarContext, AvatarProvider, useAvatarContext };
+export { AvatarContext, AvatarProvider };

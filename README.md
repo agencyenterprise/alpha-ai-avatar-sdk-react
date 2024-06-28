@@ -29,33 +29,26 @@ npm i alpha-ai-avatar-sdk-react
 
 ### Importing and Initializing
 
-To get started, initialize an `AvatarClient` instance. First, import the necessary components from the SDK in your `index.jsx`:
+To get started, first import the necessary components from the SDK:
 
 ```javascript
 import { AvatarProvider, AvatarClient } from 'alpha-ai-avatar-sdk-react';
 ```
 
-Next, initialize `AvatarClient` with your configuration. Replace `"YOUR_API_KEY"` with the API key provided by our team:
+Next, initialize `AvatarClient` with your configuration. Replace `YOUR_API_KEY` with the API key provided by our team:
 
 ```javascript
-const client = new AvatarClient({
-  apiKey: 'YOUR_API_KEY',
-  // Optional: Customize base URL for staging
-  baseUrl: 'https://staging.avatar.alpha.school',
-  // Optional: Pre-select an avatar by ID
-  avatarId: 1,
-});
+const client = new AvatarClient({ apiKey: 'YOUR_API_KEY' });
 ```
 
 #### Available Options
 
 - `apiKey` (required): Your API key for authentication.
-- `baseUrl` (optional): URL for using a staging environment. Default is the production URL.
-- `avatarId` (optional): ID of the avatar to initialize.
+- `baseUrl` (optional): Send `'https://staging.avatar.alpha.school'` to use the staging environment. Defaults to the production URL.
 
 ### Integrating with React
 
-Wrap your React app with `AvatarProvider` to ensure all components can access the avatar data. This is typically done in your `index.jsx`:
+Wrap your React app with `AvatarProvider` to ensure all components can access the avatar data:
 
 ```javascript
 import React from 'react';
@@ -63,11 +56,10 @@ import ReactDOM from 'react-dom/client';
 import { AvatarProvider, AvatarClient } from 'alpha-ai-avatar-sdk-react';
 import App from './App';
 
-const client = new AvatarClient({
-  apiKey: 'YOUR_API_KEY',
-});
+const client = new AvatarClient({ apiKey: 'YOUR_API_KEY' });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <AvatarProvider client={client}>
     <App />
@@ -75,15 +67,29 @@ root.render(
 );
 ```
 
-### Using Avatar Components
+### Connecting to the Avatar
 
-In your main app component (`App.tsx`), you can use the `Avatar` component and `useAvatarClient` hook to interact with the avatar:
+To connect to the avatar, use the `connect` method. We recommend only calling this method after the user has interacted with the page. Calling it before may result in issues with audio playback.
 
 ```javascript
-import { Avatar, useAvatarClient } from 'alpha-ai-avatar-sdk-react';
+const { connect } = useAvatar();
+
+function handleClick() {
+  connect().then(() => {
+    console.log('Connected to the avatar!');
+  });
+}
+```
+
+### Showing and controlling the Avatar
+
+Use the `Avatar` component and `useAvatar` hook to interact with the avatar:
+
+```javascript
+import { Avatar, useAvatar } from 'alpha-ai-avatar-sdk-react';
 
 function App() {
-  const client = useAvatarClient();
+  const { say, stop, switchAvatar } = useAvatar();
 
   return (
     <div>
@@ -92,13 +98,13 @@ function App() {
       <div style={{ display: 'flex', gap: '10px' }}>
         <button
           type='button'
-          onClick={() => client.sendMessage('Hello, how are you?')}>
+          onClick={() => say('Hello, how are you?')}>
           Send Message
         </button>
-        <button type='button' onClick={() => client.stop()}>
+        <button type='button' onClick={stop}>
           Stop Avatar
         </button>
-        <button type='button' onClick={() => client.switchAvatar(4)}>
+        <button type='button' onClick={() => switchAvatar(4)}>
           Switch Avatar
         </button>
       </div>
@@ -111,7 +117,7 @@ export default App;
 
 ## Examples
 
-You can find a simple example application in the `examples` folder of the library. This example demonstrates how to configure and use the SDK in a React project.
+You can find a simple example application in the [`examples/web`](examples/web/) folder of the library. This example demonstrates how to configure and use the SDK in a React project.
 
 ## Documentation
 
