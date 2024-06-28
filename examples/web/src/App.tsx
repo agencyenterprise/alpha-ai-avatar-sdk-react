@@ -18,15 +18,15 @@ export function App() {
         {room ? (
           isConnected ? (
             <>
-              <Button text='Say' onClick={() => say('Hello, how are you?')} />
-              <Button text='Stop Avatar' onClick={stop} />
-              <Button text='Switch Avatar' onClick={() => switchAvatar(4)} />
+              <Button onClick={() => say('Hello, how are you?')}>Say</Button>
+              <Button onClick={stop}>Stop Avatar</Button>
+              <Button onClick={() => switchAvatar(4)}>Switch Avatar</Button>
             </>
           ) : (
             <p>Connecting...</p>
           )
         ) : (
-          <Button text='Connect' onClick={() => connect()} />
+          <Button onClick={() => connect()}>Connect</Button>
         )}
       </div>
     </div>

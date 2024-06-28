@@ -1,8 +1,9 @@
-export function Button({ text, onClick }: { text: string; onClick: () => void; }) {
+export type ButtonProps = React.ComponentPropsWithoutRef<'button'>;
+
+export function Button(props: ButtonProps) {
   return (
     <button
       type="button"
-      onClick={onClick}
       style={{
         backgroundColor: "#0288D1",
         padding: "10px 20px",
@@ -11,8 +12,7 @@ export function Button({ text, onClick }: { text: string; onClick: () => void; }
         border: "none",
         cursor: "pointer",
       }}
-    >
-      {text}
-    </button>
+      {...props}
+    />
   );
 }
