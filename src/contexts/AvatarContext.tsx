@@ -37,9 +37,7 @@ type SayOptions = {
   ssmlVoiceConfig?: string; // Beta
 };
 
-const encoder = new TextEncoder();
-
-const AvatarContext = createContext<{
+export type AvatarContextType = {
   client: AvatarClient;
   room?: Room;
   isConnected: boolean;
@@ -49,7 +47,9 @@ const AvatarContext = createContext<{
   stop: () => Promise<void>;
   switchAvatar: (avatarId: number) => Promise<void>;
   disconnect: () => Promise<void>;
-}>({
+};
+
+const AvatarContext = createContext<AvatarContextType>({
   client: new AvatarClient({ apiKey: '' }),
   room: undefined,
   isConnected: false,
@@ -111,6 +111,7 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
   }
 
   async function sendMessage(message: any) {
+    const encoder = new TextEncoder();
     const data = encoder.encode(JSON.stringify(message));
     await room?.localParticipant?.publishData(data, { reliable: true });
   }

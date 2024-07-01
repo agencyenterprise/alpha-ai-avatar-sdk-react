@@ -7,8 +7,21 @@ export function Avatar(props: AvatarProps) {
 
   return (
     <>
-      <video ref={videoRef} autoPlay playsInline muted {...props} />
-      <audio ref={audioRef} style={{ display: 'none' }} autoPlay muted />
+      <video
+        data-testid='avatar-video'
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        {...props}
+      />
+      <audio
+        data-testid='avatar-audio'
+        ref={audioRef}
+        style={{ display: 'none' }}
+        autoPlay
+        muted
+      />
     </>
   );
 }
