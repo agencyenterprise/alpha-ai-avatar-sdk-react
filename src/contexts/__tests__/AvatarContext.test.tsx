@@ -11,7 +11,7 @@ import { AvatarClient } from '../../core/AvatarClient';
 import { useAvatar } from '../../hooks/useAvatar';
 import { ReactNode } from 'react';
 
-describe('Context', () => {
+describe('Avatar', () => {
   let mockClient: AvatarClient;
 
   beforeEach(() => {
@@ -88,6 +88,11 @@ describe('Context', () => {
         await result.current.connect();
       });
       expect(mockContextValue.connect).toHaveBeenCalled();
+
+      await act(async () => {
+        await result.current.connect(2);
+      });
+      expect(mockContextValue.connect).toHaveBeenCalledWith(2);
 
       await act(async () => {
         await result.current.say('Hello');
