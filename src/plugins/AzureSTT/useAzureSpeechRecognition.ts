@@ -1,12 +1,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 import { AzureSpeechRecognition } from './AzureSpeechRecognition';
-
-export type UseSpeechRecognitionOptions = {
-  subscriptionKey: string;
-  serviceRegion: string;
-  onSpeechRecognized: (transcript: string) => void;
-};
+import { UseSpeechRecognitionOptions } from './types';
 
 export function useAzureSpeechRecognition({
   subscriptionKey,
