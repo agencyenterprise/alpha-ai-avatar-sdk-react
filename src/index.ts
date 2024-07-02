@@ -14,4 +14,4 @@ export { useAvatar } from './hooks/useAvatar';
 export * from './components/Avatar/Avatar';
 
 // Plugins
-export { useAzureSpeechRecognition } from './plugins/AzureSpeechRecognition';
+export { useAzureSpeechRecognition } from './plugins/AzureSTT';
