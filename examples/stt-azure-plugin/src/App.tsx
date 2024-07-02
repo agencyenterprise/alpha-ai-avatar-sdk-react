@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 export function App() {
   const { room, isConnected, connect, say, stop, switchAvatar } = useAvatar();
   const { startRecognizing, stopRecognizing } = useAzureSpeechRecognition({
-    subscriptionKey: 'YOUR_AZURE_SUBSCRIPTION_KEY',
+    subscriptionKey: 'AZURE_SUBSCRIPTION_KEY',
     serviceRegion: 'SERVICE_REGION', // westus, eastus...
     onSpeechRecognized: (transcript) => {
       console.log(transcript);

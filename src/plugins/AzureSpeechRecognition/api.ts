@@ -1,6 +1,6 @@
 import { GetTokenResponse } from './types';
 
-export async function getToken(
+export async function fetchToken(
   subscriptionKey: string,
   serviceRegion: string,
 ): Promise<GetTokenResponse> {
@@ -18,7 +18,7 @@ export async function getToken(
       },
     );
     const tokenResponse = await response.text();
-    return { token: tokenResponse, region: serviceRegion, error: null };
+    return { token: tokenResponse, region: serviceRegion };
   } catch (error: unknown) {
     return { token: null, region: null, error: (error as Error).message };
   }

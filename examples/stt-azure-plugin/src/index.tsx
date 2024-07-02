@@ -4,7 +4,7 @@ import { App } from './App';
 
 import { AvatarClient, AvatarProvider } from 'alpha-ai-avatar-sdk-react';
 
-const client = new AvatarClient({ apiKey: 'YOUR_API_KEY' });
+const client = new AvatarClient({ apiKey: 'API_KEY' });
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

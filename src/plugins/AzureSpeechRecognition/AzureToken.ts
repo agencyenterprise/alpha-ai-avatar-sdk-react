@@ -1,29 +1,38 @@
 import Cookie from 'universal-cookie';
-import { getToken } from './api';
+import { fetchToken } from './api';
+import { GetTokenResponse } from './types';
 
 export class AzureToken {
-  static async getOrRefresh(subscriptionKey: string, serviceRegion: string) {
+  static async getToken(
+    subscriptionKey: string,
+    serviceRegion: string,
+  ): Promise<GetTokenResponse> {
     const cookie = new Cookie();
     const speechToken = cookie.get('azure-speech-token');
 
     if (speechToken === undefined) {
       try {
-        const data = await getToken(subscriptionKey, serviceRegion);
+        const data = await fetchToken(subscriptionKey, serviceRegion);
+        if (data.error) {
+          throw new Error(data.error);
+        }
+
         const token = data.token;
         const region = data.region;
         cookie.set('azure-speech-token', region + ':' + token, {
           maxAge: 300,
           path: '/',
         }); // tokens for this service expire every 10 minutes, we set the cookie to expire after 5 minutes
-        return { authToken: token, region: region };
+
+        return { token: token, region };
       } catch (error: unknown) {
         console.error(error);
-        return { authToken: null, error };
+        return { token: null, region: null, error: (error as Error).message };
       }
     } else {
       const idx = speechToken.indexOf(':');
       return {
-        authToken: speechToken.slice(idx + 1),
+        token: speechToken.slice(idx + 1),
         region: speechToken.slice(0, idx),
       };
     }

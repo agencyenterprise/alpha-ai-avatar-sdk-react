@@ -1,5 +1,5 @@
 {
-  "name": "alpha-ai-avatar-sdk-react-example",
+  "name": "simple-example",
   "version": "0.0.1",
   "scripts": {
     "start": "react-scripts start",

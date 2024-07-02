@@ -16,15 +16,16 @@ export class AzureSpeechRecognition {
     onSpeechRecognized: (transcript: string) => void,
   ) {
     try {
-      const { authToken, region } = await AzureToken.getOrRefresh(
+      const { token, region, error } = await AzureToken.getToken(
         subscriptionKey,
         serviceRegion,
       );
 
-      const speechConfig = SpeechConfig.fromAuthorizationToken(
-        authToken,
-        region,
-      );
+      if (!token || !region || error) {
+        throw new Error(error);
+      }
+
+      const speechConfig = SpeechConfig.fromAuthorizationToken(token, region);
       speechConfig.speechRecognitionLanguage = 'en-US';
 
       const audioConfig = AudioConfig.fromDefaultMicrophoneInput();
