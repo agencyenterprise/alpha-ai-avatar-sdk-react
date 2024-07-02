@@ -18,7 +18,7 @@ describe('Avatar', () => {
     });
   });
 
-  it('renders video and audio elements with correct props', () => {
+  it('render video element with correct props', () => {
     render(<Avatar />);
 
     const videoElement = screen.getByTestId('avatar-video');
@@ -26,6 +26,10 @@ describe('Avatar', () => {
     expect(videoElement.tagName).toBe('VIDEO');
     expect(videoElement).toHaveAttribute('autoplay');
     expect(videoElement).toHaveAttribute('playsinline');
+  });
+
+  it('render audio element with correct props', () => {
+    render(<Avatar />);
 
     const audioElement = screen.getByTestId('avatar-audio');
     expect(audioElement).toBeInTheDocument();
