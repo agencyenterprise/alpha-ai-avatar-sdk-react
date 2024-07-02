@@ -11,7 +11,7 @@ import { AvatarClient } from '../../core/AvatarClient';
 import { useAvatar } from '../../hooks/useAvatar';
 import { ReactNode } from 'react';
 
-describe('Avatar', () => {
+describe('AvatarContext', () => {
   let mockClient: AvatarClient;
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Avatar', () => {
     });
   });
 
-  describe('AvatarContext', () => {
+  describe('useAvatar', () => {
     let mockContextValue: AvatarContextType;
 
     beforeEach(() => {
