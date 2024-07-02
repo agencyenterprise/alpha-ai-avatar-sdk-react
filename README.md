@@ -11,7 +11,8 @@ Hello! 👋 This tutorial will help you get started with the **Avatar SDK for Re
     - [Importing and Initializing](#importing-and-initializing)
       - [Available Options](#available-options)
     - [Integrating with React](#integrating-with-react)
-    - [Using Avatar Components](#using-avatar-components)
+    - [Connecting to the Avatar](#connecting-to-the-avatar)
+    - [Showing and controlling the Avatar](#showing-and-controlling-the-avatar)
   - [Examples](#examples)
   - [Documentation](#documentation)
 
@@ -96,9 +97,7 @@ function App() {
       <Avatar style={{ borderRadius: '20px', width: 250, height: 250 }} />
 
       <div style={{ display: 'flex', gap: '10px' }}>
-        <button
-          type='button'
-          onClick={() => say('Hello, how are you?')}>
+        <button type='button' onClick={() => say('Hello, how are you?')}>
           Send Message
         </button>
         <button type='button' onClick={stop}>
@@ -117,7 +116,7 @@ export default App;
 
 ## Examples
 
-You can find a simple example application in the [`examples/web`](examples/web/) folder of the library. This example demonstrates how to configure and use the SDK in a React project.
+You can find a few example applications in the [`examples/`](examples/) folder of the library. These examples demonstrates how to configure and use the SDK in a React project.
 
 ## Documentation
 
