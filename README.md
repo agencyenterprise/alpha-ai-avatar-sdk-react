@@ -120,7 +120,7 @@ You can find a few example applications in the [`examples/`](examples/) folder o
 
 ## Documentation
 
-For a detailed overview of all supported configurations, please refer to our comprehensive [documentation](docs/).
+For a detailed overview of all supported configurations, please refer to our comprehensive [`documentation`](docs/).
 
 ---
 
