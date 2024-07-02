@@ -116,7 +116,7 @@ export default App;
 
 ## Examples
 
-You can find a few example applications in the [`examples/`](examples/) folder of the library. These examples demonstrates how to configure and use the SDK in a React project.
+You can find a few examples in the [`examples/`](examples/) folder of the library. These examples demonstrates how to configure and use the SDK in a React project.
 
 ## Documentation
 
