@@ -1,26 +1,29 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-import dts from 'rollup-plugin-dts';
-import postcss from 'rollup-plugin-postcss';
-import packageJson from './package.json' assert { type: 'json' };
+import copy from 'rollup-plugin-copy';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 
 export default [
   {
-    input: 'src/index.ts',
+    input: {
+      index: 'src/index.ts',
+      'plugins/stt/azure/index': 'src/plugins/stt/azure/index.ts',
+    },
     output: [
       {
-        file: packageJson.main,
+        dir: 'dist',
         format: 'cjs',
-        sourcemap: true,
+        entryFileNames: '[name].js',
       },
       {
-        file: packageJson.module,
+        dir: 'dist',
         format: 'esm',
-        sourcemap: true,
+        entryFileNames: '[name].esm.js',
       },
     ],
     plugins: [
+      peerDepsExternal(),
       resolve({
         browser: true,
         preferBuiltins: false,
@@ -35,13 +38,12 @@ export default [
           'examples/**',
         ],
       }),
-      postcss({ extensions: ['.css'], inject: true, extract: false }),
+      copy({
+        targets: [
+          { src: 'README.md', dest: 'dist' },
+          { src: 'package.json', dest: 'dist' },
+        ],
+      }),
     ],
-  },
-  {
-    input: 'dist/esm/types/index.d.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'esm' }],
-    plugins: [dts()],
-    external: [/\.css$/],
   },
 ];

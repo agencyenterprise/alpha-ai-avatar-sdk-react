@@ -1,10 +1,10 @@
 import {
   Avatar,
   useAvatar,
-  useAzureSpeechRecognition,
 } from 'alpha-ai-avatar-sdk-react';
-import { Button } from './Button';
+import { useAzureSpeechRecognition } from 'alpha-ai-avatar-sdk-react/plugins/stt/azure';
 import { useEffect } from 'react';
+import { Button } from './Button';
 
 export function App() {
   const { room, isConnected, connect, say, stop, switchAvatar } = useAvatar();
