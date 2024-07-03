@@ -13,12 +13,11 @@ Hello! 👋 This tutorial will help you get started with the **Avatar SDK for Re
     - [Integrating with React](#integrating-with-react)
     - [Connecting to the Avatar](#connecting-to-the-avatar)
     - [Showing and controlling the Avatar](#showing-and-controlling-the-avatar)
+  - [Plugins](#plugins)
   - [Examples](#examples)
   - [Documentation](#documentation)
 
 ## Installation
-
-**Note: Installation will be available soon.**
 
 To install the package, run the following command:
 
@@ -114,9 +113,13 @@ function App() {
 export default App;
 ```
 
+## Plugins
+
+You can explore our comprehensive list of plugins supported within the Avatar SDK to streamline and accelerate your application development process. For detailed information about each plugin, refer to our [`plugins documentation`](docs/plugins).
+
 ## Examples
 
-You can find a few examples in the [`examples/`](examples/) folder of the library. These examples demonstrates how to configure and use the SDK in a React project.
+You can find a few examples in the [`examples`](examples/) folder of the library. These examples demonstrates how to configure and use the SDK in a React project.
 
 ## Documentation
 
