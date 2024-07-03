@@ -22,4 +22,4 @@ export declare type GetSupportedVoicesResponse = {
   locale: string;
   styleList: string[];
   wordsPerMinute: string;
-};
+}[];
