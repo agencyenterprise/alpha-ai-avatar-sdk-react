@@ -4,8 +4,6 @@ import typescript from '@rollup/plugin-typescript';
 import copy from 'rollup-plugin-copy';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 
-const external = ['react', 'react-dom'];
-
 export default [
   {
     input: {
