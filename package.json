@@ -6,7 +6,17 @@
   "module": "index.esm.js",
   "types": "index.d.ts",
   "author": "William Sanches",
-  "license": "",
+  "license": "MIT",
+  "homepage": "https://github.com/agencyenterprise/alpha-ai-avatar-sdk-react",
+  "repository": {
+    "url": "git+https://github.com/agencyenterprise/alpha-ai-avatar-sdk-react.git"
+  },
+  "keywords": [
+    "avatar",
+    "sdk",
+    "react",
+    "alpha-ai"
+  ],
   "scripts": {
     "dev": "rollup -c -w",
     "build": "rollup -c",
