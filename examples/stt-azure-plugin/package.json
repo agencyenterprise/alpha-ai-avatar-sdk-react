@@ -1,5 +1,5 @@
 {
-  "name": "alpha-ai-avatar-sdk-react-example",
+  "name": "stt-azure-plugin-example",
   "version": "0.0.1",
   "scripts": {
     "start": "react-scripts start",
@@ -25,7 +25,7 @@
     ]
   },
   "dependencies": {
-    "alpha-ai-avatar-sdk-react": "file:../../",
+    "alpha-ai-avatar-sdk-react": "file:../../dist/",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1"
