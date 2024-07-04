@@ -1,5 +1,7 @@
 # Getting Started
 
+[![npm version](https://badge.fury.io/js/alpha-ai-avatar-sdk-react.svg)](https://badge.fury.io/js/alpha-ai-avatar-sdk-react)
+
 Hello! 👋 This tutorial will help you get started with the **Avatar SDK for React**.
 
 ## Table of Contents
