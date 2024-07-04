@@ -42,7 +42,6 @@ export class DeepgramSpeechRecognition {
 
   stop() {
     this.mediaRecorder?.stop();
-    this.live?.disconnect();
     this.live?.finish();
   }
 }
