@@ -37,4 +37,35 @@ Converts spoken language into written text. It enables applications to transcrib
 
    For a complete example, refer to our [Azure Speech-to-Text plugin example](/examples/stt-azure-plugin).
 
-### Deepgram (Soon)
+### Deepgram
+
+[Deepgram Speech-to-Text (STT)](https://developers.deepgram.com/docs/getting-started-with-live-streaming-audio) documentation.
+
+#### Usage
+
+1. **Import the Plugin**
+
+   To use the Deepgram Speech-to-Text plugin, start by importing it:
+
+   ```javascript
+   import { useDeepgramSpeechRecognition } from 'alpha-ai-avatar-sdk-react/plugins/stt/deepgram';
+   ```
+
+2. **Configure the Plugin**
+
+   Use the plugin by initializing it with your Deepgram API Key. Define a callback function to handle the recognized speech:
+
+   ```javascript
+   const { startRecognizing, stopRecognizing } = useDeepgramSpeechRecognition({
+     apiKey: 'API_KEY',
+     onSpeechRecognized: (transcript) => {
+       console.log(transcript);
+       say(transcript);
+     },
+     deepgramOptions: {}, // Optional
+   });
+   ```
+
+3. **Example**
+
+   For a complete example, refer to our [Deepgram Speech-to-Text plugin example](/examples/stt-deepgram-plugin).
