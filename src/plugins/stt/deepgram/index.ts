@@ -1,1 +1,1 @@
-// Soon
+export { useDeepgramSpeechRecognition } from './useDeepgramSpeechRecognition';

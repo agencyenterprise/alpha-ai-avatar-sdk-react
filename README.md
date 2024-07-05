@@ -1,5 +1,7 @@
 # Getting Started
 
+[![npm version](https://badge.fury.io/js/alpha-ai-avatar-sdk-react.svg)](https://badge.fury.io/js/alpha-ai-avatar-sdk-react)
+
 Hello! 👋 This tutorial will help you get started with the **Avatar SDK for React**.
 
 ## Table of Contents
@@ -115,15 +117,15 @@ export default App;
 
 ## Plugins
 
-You can explore our comprehensive list of plugins supported within the Avatar SDK to streamline and accelerate your application development process. For detailed information about each plugin, refer to our [`plugins documentation`](docs/plugins).
+You can explore our comprehensive list of plugins supported within the Avatar SDK to streamline and accelerate your application development process. For detailed information about each plugin, refer to our [plugins documentation](docs/plugins).
 
 ## Examples
 
-You can find a few examples in the [`examples`](examples/) folder of the library. These examples demonstrates how to configure and use the SDK in a React project.
+You can find a few examples in the [examples](examples/) folder of the library. These examples demonstrates how to configure and use the SDK in a React project.
 
 ## Documentation
 
-For a detailed overview of all supported configurations, please refer to our comprehensive [`documentation`](docs/).
+For a detailed overview of all supported configurations, please refer to our comprehensive [documentation](docs/).
 
 ---
 

@@ -1,6 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import del from 'rollup-plugin-delete';
 import copy from 'rollup-plugin-copy';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 
@@ -9,6 +10,7 @@ export default [
     input: {
       index: 'src/index.ts',
       'plugins/stt/azure/index': 'src/plugins/stt/azure/index.ts',
+      'plugins/stt/deepgram/index': 'src/plugins/stt/deepgram/index.ts',
     },
     output: [
       {
@@ -23,6 +25,7 @@ export default [
       },
     ],
     plugins: [
+      del({ targets: 'dist/*' }),
       peerDepsExternal(),
       resolve({
         browser: true,
@@ -45,5 +48,15 @@ export default [
         ],
       }),
     ],
+    onwarn: (warning, next) => {
+      if (
+        (warning.id && /node_modules/.test(warning.id)) ||
+        (warning.ids && warning.ids.every((id) => /node_modules/.test(id)))
+      ) {
+        return;
+      }
+
+      next(warning);
+    },
   },
 ];
