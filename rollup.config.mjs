@@ -25,6 +25,7 @@ export default [
       },
     ],
     plugins: [
+      del({ targets: 'dist/*' }),
       peerDepsExternal(),
       resolve({
         browser: true,
@@ -46,12 +47,14 @@ export default [
           { src: 'package.json', dest: 'dist' },
         ],
       }),
-      del({ targets: 'dist/*' }),
     ],
     onwarn: (warning, next) => {
-      if (warning.code === 'CIRCULAR_DEPENDENCY') return;
-      if (warning.code === 'THIS_IS_UNDEFINED') return;
-      if (warning.code === 'PLUGIN_WARNING') return;
+      if (
+        (warning.id && /node_modules/.test(warning.id)) ||
+        (warning.ids && warning.ids.every((id) => /node_modules/.test(id)))
+      ) {
+        return;
+      }
 
       next(warning);
     },

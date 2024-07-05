@@ -21,8 +21,6 @@ export class DeepgramSpeechRecognition {
       });
 
       this.live.on(LiveTranscriptionEvents.Open, () => {
-        console.log('started speech recognition');
-
         this.mediaRecorder?.addEventListener('dataavailable', (event) => {
           if (event.data.size > 0) {
             this.live?.send(event.data);
