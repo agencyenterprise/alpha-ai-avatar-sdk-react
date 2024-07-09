@@ -2496,8 +2496,8 @@ ajv@^8.0.0, ajv@^8.6.0, ajv@^8.9.0:
     require-from-string "^2.0.2"
     uri-js "^4.4.1"
 
-"alpha-ai-avatar-sdk-react@file:../../dist/":
-  version "0.0.1"
+"alpha-ai-avatar-sdk-react@file:../../dist":
+  version "0.0.5"
 
 ansi-escapes@^4.2.1, ansi-escapes@^4.3.1:
   version "4.3.2"
