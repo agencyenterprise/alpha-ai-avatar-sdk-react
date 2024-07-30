@@ -15,14 +15,6 @@ export function useWebAvatar() {
     if (!room) {
       return;
     }
-    if (room.state === ConnectionState.Connected) {
-      // support for <Avatar> instances created AFTER "connect" by making sure the new video and audio elements are attached
-      room.remoteParticipants.forEach((participant) => {
-        participant.trackPublications.forEach(({ track }) => {
-          handleTrackSubscribed(track!);
-        });
-      });
-    }
 
     function handleTrackSubscribed(track: RemoteTrack) {
       if (
@@ -55,6 +47,15 @@ export function useWebAvatar() {
         RoomEvent.AudioPlaybackStatusChanged,
         handleAudioPlaybackStatusChanged,
       );
+
+    if (room.state === ConnectionState.Connected) {
+      // support for <Avatar> instances created AFTER "connect" by making sure the new video and audio elements are attached
+      room.remoteParticipants.forEach((participant) => {
+        participant.trackPublications.forEach(({ track }) => {
+          handleTrackSubscribed(track!);
+        });
+      });
+    }
 
     return () => {
       room
