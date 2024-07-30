@@ -1,4 +1,4 @@
-import { RoomEvent, Track } from 'livekit-client';
+import { ConnectionState, RoomEvent, Track } from 'livekit-client';
 import { useEffect, useRef, useState } from 'react';
 
 import type { RemoteTrack } from 'livekit-client';
@@ -15,14 +15,26 @@ export function useWebAvatar() {
     if (!room) {
       return;
     }
+    if (room.state === ConnectionState.Connected) {
+      // support for <Avatar> instances created AFTER "connect" by making sure the new video and audio elements are attached
+      room.remoteParticipants.forEach((participant) => {
+        participant.trackPublications.forEach(({ track }) => {
+          handleTrackSubscribed(track!);
+        });
+      });
+    }
 
     function handleTrackSubscribed(track: RemoteTrack) {
-      if (track.kind === Track.Kind.Video) {
+      if (
+        track.kind === Track.Kind.Video &&
+        !track.attachedElements.includes(videoRef.current!)
+      ) {
         track.attach(videoRef.current!);
       } else if (
         audioRef &&
         track.kind === Track.Kind.Audio &&
-        room?.canPlaybackAudio
+        room?.canPlaybackAudio &&
+        !track.attachedElements.includes(audioRef.current!)
       ) {
         track.attach(audioRef.current!);
       }
@@ -39,14 +51,20 @@ export function useWebAvatar() {
     room
       .on(RoomEvent.TrackSubscribed, handleTrackSubscribed)
       .on(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
-      .on(RoomEvent.AudioPlaybackStatusChanged, handleAudioPlaybackStatusChanged)
+      .on(
+        RoomEvent.AudioPlaybackStatusChanged,
+        handleAudioPlaybackStatusChanged,
+      );
 
     return () => {
       room
         .off(RoomEvent.TrackSubscribed, handleTrackSubscribed)
         .off(RoomEvent.TrackUnsubscribed, handleTrackUnsubscribed)
-        .off(RoomEvent.AudioPlaybackStatusChanged, handleAudioPlaybackStatusChanged);
-    }
+        .off(
+          RoomEvent.AudioPlaybackStatusChanged,
+          handleAudioPlaybackStatusChanged,
+        );
+    };
   }, [room]);
 
   return { ...avatar, videoRef, audioRef, canPlaybackAudio };
