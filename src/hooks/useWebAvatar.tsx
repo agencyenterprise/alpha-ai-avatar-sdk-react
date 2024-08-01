@@ -17,6 +17,9 @@ export function useWebAvatar() {
     }
 
     function handleTrackSubscribed(track: RemoteTrack) {
+      if (!track) {
+        return;
+      }
       if (
         track.kind === Track.Kind.Video &&
         !track.attachedElements.includes(videoRef.current!)
