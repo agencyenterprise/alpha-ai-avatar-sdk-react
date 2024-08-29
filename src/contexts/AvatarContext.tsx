@@ -1,3 +1,4 @@
+import { EventEmitter } from 'events';
 import { Room, RoomEvent } from 'livekit-client';
 import { ReactNode, createContext, useState } from 'react';
 import { AvatarClient } from '../core/AvatarClient';
@@ -8,7 +9,6 @@ import {
   Prompt,
   TranscriberMessage,
 } from '../core/types';
-import { EventEmitter } from 'events';
 
 type SayOptions = {
   voiceName?: string;
@@ -84,25 +84,19 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
   function handleDataReceived(data: Uint8Array) {
     const message: ParsedMessage = JSON.parse(new TextDecoder().decode(data));
 
-    if (message.type === MessageType.State) {
-      if (message.data.state === MessageState.Speaking) {
-        setIsAvatarSpeaking(true);
-      } else {
-        setIsAvatarSpeaking(false);
-      }
-    }
-
-    if (message.type === MessageType.Transcript) {
-      onTranscriptionHandler(message.data);
-      eventEmitter.emit('transcription', message.data);
-    }
-
-    if (message.type === MessageType.TranscriberState) {
-      eventEmitter.emit('transcriberStatusChange', message.data.status);
-    }
-
-    if (message.type === MessageType.Error) {
-      throw new Error('Error from server');
+    switch (message.type) {
+      case MessageType.State:
+        setIsAvatarSpeaking(message.data.state === MessageState.Speaking);
+        break;
+      case MessageType.Transcript:
+        onTranscriptionHandler(message.data);
+        eventEmitter.emit('transcription', message.data);
+        break;
+      case MessageType.TranscriberState:
+        eventEmitter.emit('transcriberStatusChange', message.data.status);
+        break;
+      case MessageType.Error:
+        throw new Error('Error from server');
     }
   }
 
