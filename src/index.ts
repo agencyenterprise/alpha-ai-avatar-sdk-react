@@ -1,5 +1,5 @@
 // Types
-export type * from './core/types';
+export * from './core/types';
 
 // Classes
 export { AvatarClient } from './core/AvatarClient';
