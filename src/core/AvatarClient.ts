@@ -24,11 +24,6 @@ export class AvatarClient extends HTTPClient {
     conversational?: boolean,
     initialPrompt?: Prompt[],
   ) {
-    console.log({
-      avatarId: avatarId ?? this.avatarId,
-      conversational: conversational ?? this.conversational,
-      initialPrompt: initialPrompt ?? this.initialPrompt,
-    });
     return this.post<CreateRoomResponse>('/rooms', {
       avatarId: avatarId ?? this.avatarId,
       conversational: conversational ?? this.conversational,

@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events';
 import { Room, RoomEvent } from 'livekit-client';
 import { ReactNode, createContext, useState } from 'react';
 import { AvatarClient } from '../core/AvatarClient';
@@ -7,7 +6,8 @@ import {
   MessageType,
   ParsedMessage,
   Prompt,
-  TranscriberMessage,
+  ChatMessage,
+  TranscriberStatus,
 } from '../core/types';
 
 type SayOptions = {
@@ -27,9 +27,10 @@ type SayOptions = {
 export type AvatarContextType = {
   client: AvatarClient;
   room?: Room;
-  messages: TranscriberMessage[];
+  messages: ChatMessage[];
   isConnected: boolean;
   isAvatarSpeaking: boolean;
+  transcriberStatus: TranscriberStatus;
   connect: (
     avatarId?: number,
     conversational?: boolean,
@@ -40,14 +41,7 @@ export type AvatarContextType = {
   switchAvatar: (avatarId: number) => Promise<void>;
   enableMicrophone: () => Promise<void>;
   disableMicrophone: () => Promise<void>;
-  addEventListener: (
-    eventName: string,
-    listener: (...args: any[]) => void,
-  ) => void;
-  removeEventListener: (
-    eventName: string,
-    listener: (...args: any[]) => void,
-  ) => void;
+  clearMessages: () => void;
   disconnect: () => Promise<void>;
 };
 
@@ -57,14 +51,14 @@ const AvatarContext = createContext<AvatarContextType>({
   messages: [],
   isConnected: false,
   isAvatarSpeaking: false,
+  transcriberStatus: TranscriberStatus.Closed,
   connect: () => Promise.resolve(),
   say: () => Promise.resolve(),
   stop: () => Promise.resolve(),
   switchAvatar: () => Promise.resolve(),
   enableMicrophone: () => Promise.resolve(),
   disableMicrophone: () => Promise.resolve(),
-  addEventListener: () => {},
-  removeEventListener: () => {},
+  clearMessages: () => {},
   disconnect: () => Promise.resolve(),
 });
 
@@ -74,12 +68,13 @@ type AvatarProviderProps = {
 };
 
 function AvatarProvider({ children, client }: AvatarProviderProps) {
-  const eventEmitter: EventEmitter = new EventEmitter();
-
   const [room, setRoom] = useState<Room>();
   const [isConnected, setIsConnected] = useState(false);
   const [isAvatarSpeaking, setIsAvatarSpeaking] = useState(false);
-  const [messages, setMessages] = useState<TranscriberMessage[]>([]);
+  const [transcriberStatus, setTranscriberStatus] = useState<TranscriberStatus>(
+    TranscriberStatus.Closed,
+  );
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   function handleDataReceived(data: Uint8Array) {
     const message: ParsedMessage = JSON.parse(new TextDecoder().decode(data));
@@ -90,10 +85,9 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
         break;
       case MessageType.Transcript:
         onTranscriptionHandler(message.data);
-        eventEmitter.emit('transcription', message.data);
         break;
       case MessageType.TranscriberState:
-        eventEmitter.emit('transcriberStatusChange', message.data.status);
+        setTranscriberStatus(message.data.status);
         break;
       case MessageType.Error:
         throw new Error('Error from server');
@@ -110,11 +104,16 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
     }
 
     const newRoom = new Room({ adaptiveStream: true });
+    const { token, serverUrl } = await client.connect(
+      avatarId,
+      conversational,
+      initialPrompt,
+    );
+    newRoom.prepareConnection(token, serverUrl);
 
     newRoom
       .on(RoomEvent.Connected, () => {
         setIsConnected(true);
-        console.log('Connected to room');
       })
       .on(RoomEvent.DataReceived, handleDataReceived)
       .on(RoomEvent.Disconnected, () => {
@@ -122,14 +121,7 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
       });
 
     setRoom(newRoom);
-
-    const { token, serverUrl } = await client.connect(
-      avatarId,
-      conversational,
-      initialPrompt,
-    );
-
-    await newRoom.connect(serverUrl, token);
+    newRoom.connect(serverUrl, token);
   }
 
   async function sendMessage(message: any) {
@@ -168,26 +160,7 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
     }
   }
 
-  function addEventListener(
-    eventName: string,
-    listener: (...args: any[]) => void,
-  ) {
-    eventEmitter.on(eventName, listener);
-  }
-
-  function removeEventListener(
-    eventName: string,
-    listener: (...args: any[]) => void,
-  ) {
-    eventEmitter.off(eventName, listener);
-  }
-
-  async function disconnect() {
-    await room?.disconnect();
-    setRoom(undefined);
-  }
-
-  const onTranscriptionHandler = ({
+  function onTranscriptionHandler({
     role,
     message,
     isFinal,
@@ -195,7 +168,7 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
     role: string;
     message: string;
     isFinal: boolean;
-  }) => {
+  }) {
     setMessages((prevMessages) => {
       const lastIndex = prevMessages.length - 1;
       const lastMessage = prevMessages[lastIndex];
@@ -217,7 +190,16 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
         },
       ];
     });
-  };
+  }
+
+  function clearMessages() {
+    setMessages([]);
+  }
+
+  async function disconnect() {
+    await room?.disconnect();
+    setRoom(undefined);
+  }
 
   return (
     <AvatarContext.Provider
@@ -227,14 +209,14 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
         messages,
         isConnected,
         isAvatarSpeaking,
+        transcriberStatus,
         connect,
         say,
         stop,
         switchAvatar,
         enableMicrophone,
         disableMicrophone,
-        addEventListener,
-        removeEventListener,
+        clearMessages,
         disconnect,
       }}>
       {children}

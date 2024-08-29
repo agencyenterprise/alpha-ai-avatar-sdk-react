@@ -39,10 +39,6 @@ export function App() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log('Messages:', messages);
-  }, [messages]);
-
   return (
     <div
       style={{

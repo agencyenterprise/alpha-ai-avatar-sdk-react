@@ -26,7 +26,7 @@ export declare type GetSupportedVoicesResponse = {
   wordsPerMinute: string;
 }[];
 
-export type TranscriberMessage = {
+export type ChatMessage = {
   role: string;
   content: string;
   isFinal: boolean;
