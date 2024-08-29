@@ -1,10 +1,5 @@
-import {
-  Avatar,
-  TranscriberStatus,
-  useAvatar,
-} from 'alpha-ai-avatar-sdk-react';
+import { Avatar, useAvatar } from 'alpha-ai-avatar-sdk-react';
 import { Button } from './Button';
-import { useEffect } from 'react';
 
 export function App() {
   const {
@@ -14,30 +9,9 @@ export function App() {
     disconnect,
     say,
     stop,
-    messages,
     switchAvatar,
     enableMicrophone,
-    addEventListener,
-    removeEventListener,
   } = useAvatar();
-
-  useEffect(() => {
-    const onTranscriberStatusChangeHandler = (status: TranscriberStatus) => {
-      console.log('Transcriber status changed:', status);
-    };
-
-    addEventListener(
-      'transcriberStatusChange',
-      onTranscriberStatusChangeHandler,
-    );
-
-    return () => {
-      removeEventListener(
-        'transcriberStatusChange',
-        onTranscriberStatusChangeHandler,
-      );
-    };
-  }, []);
 
   return (
     <div
