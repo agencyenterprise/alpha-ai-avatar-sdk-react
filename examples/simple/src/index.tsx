@@ -4,7 +4,16 @@ import { App } from './App';
 
 import { AvatarClient, AvatarProvider } from 'alpha-ai-avatar-sdk-react';
 
-const client = new AvatarClient({ apiKey: 'API_KEY' });
+const client = new AvatarClient({
+  apiKey: 'API_KEY',
+  conversational: true,
+  initialPrompt: [
+    {
+      role: 'system',
+      content: 'Act like Albert Einstein',
+    },
+  ],
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

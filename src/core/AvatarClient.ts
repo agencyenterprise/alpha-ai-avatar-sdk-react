@@ -1,17 +1,38 @@
 import { HTTPClient } from './HTTPClient';
-import { AvatarClientConfig, CreateRoomResponse, GetAvatarsResponse, GetSupportedVoicesResponse } from './types';
+import {
+  AvatarClientConfig,
+  CreateRoomResponse,
+  GetAvatarsResponse,
+  GetSupportedVoicesResponse,
+  Prompt,
+} from './types';
 
 export class AvatarClient extends HTTPClient {
   private avatarId?: number;
+  private conversational: boolean = false;
+  private initialPrompt?: Prompt[];
 
   constructor(config: AvatarClientConfig) {
     super(config.baseUrl ?? 'https://avatar.alpha.school', config.apiKey);
     this.avatarId = config.avatarId;
+    this.conversational = config.conversational ?? false;
+    this.initialPrompt = config.initialPrompt;
   }
 
-  connect(avatarId?: number) {
+  connect(
+    avatarId?: number,
+    conversational?: boolean,
+    initialPrompt?: Prompt[],
+  ) {
+    console.log({
+      avatarId: avatarId ?? this.avatarId,
+      conversational: conversational ?? this.conversational,
+      initialPrompt: initialPrompt ?? this.initialPrompt,
+    });
     return this.post<CreateRoomResponse>('/rooms', {
       avatarId: avatarId ?? this.avatarId,
+      conversational: conversational ?? this.conversational,
+      initialPrompt: initialPrompt ?? this.initialPrompt,
     });
   }
 
