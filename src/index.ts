@@ -1,5 +1,5 @@
 // Types
-export type * from 'alpha-ai-avatar-sdk-js';
+export * from 'alpha-ai-avatar-sdk-js';
 
 // Classes
 export { AvatarClient } from 'alpha-ai-avatar-sdk-js';
