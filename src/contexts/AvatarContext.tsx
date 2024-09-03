@@ -1,6 +1,6 @@
 import { Room, RoomEvent } from 'livekit-client';
 import { ReactNode, createContext, useState } from 'react';
-import { AvatarClient } from '../core/AvatarClient';
+import { AvatarClient } from 'alpha-ai-avatar-sdk-js';
 
 enum MessageState {
   Idle = 0,
@@ -92,7 +92,7 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
       return;
     }
 
-    const newRoom = new Room({ adaptiveStream: true });
+    const newRoom = await client.connect(avatarId);
 
     newRoom
       .on(RoomEvent.Connected, () => {
@@ -104,10 +104,6 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
       });
 
     setRoom(newRoom);
-
-    const { token, serverUrl } = await client.connect(avatarId);
-
-    newRoom.connect(serverUrl, token);
   }
 
   async function sendMessage(message: any) {
