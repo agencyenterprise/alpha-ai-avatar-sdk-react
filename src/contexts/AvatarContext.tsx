@@ -2,27 +2,6 @@ import { Room, RoomEvent } from 'livekit-client';
 import { ReactNode, createContext, useState } from 'react';
 import { AvatarClient } from 'alpha-ai-avatar-sdk-js';
 
-enum MessageState {
-  Idle = 0,
-  Loading = 1,
-  Speaking = 2,
-  Active = 3,
-}
-
-enum MessageType {
-  Transcript = 0,
-  State = 1,
-  Error = 2,
-}
-
-type Message = {
-  data: {
-    message: string;
-    state: MessageState;
-  };
-  type: MessageType;
-};
-
 type SayOptions = {
   voiceName?: string;
   voiceStyle?: string;
@@ -40,24 +19,38 @@ type SayOptions = {
 export type AvatarContextType = {
   client: AvatarClient;
   room?: Room;
+  messages: ChatMessage[];
   isConnected: boolean;
   isAvatarSpeaking: boolean;
-  connect: (avatarId?: number) => Promise<void>;
+  transcriberStatus: TranscriberStatus;
+  connect: (
+    avatarId?: number,
+    conversational?: boolean,
+    initialPrompt?: Prompt[],
+  ) => Promise<void>;
   say: (message: string, options?: SayOptions) => Promise<void>;
   stop: () => Promise<void>;
   switchAvatar: (avatarId: number) => Promise<void>;
+  enableMicrophone: () => Promise<void>;
+  disableMicrophone: () => Promise<void>;
+  clearMessages: () => void;
   disconnect: () => Promise<void>;
 };
 
 const AvatarContext = createContext<AvatarContextType>({
   client: new AvatarClient({ apiKey: '' }),
   room: undefined,
+  messages: [],
   isConnected: false,
   isAvatarSpeaking: false,
+  transcriberStatus: TranscriberStatus.Closed,
   connect: () => Promise.resolve(),
   say: () => Promise.resolve(),
   stop: () => Promise.resolve(),
   switchAvatar: () => Promise.resolve(),
+  enableMicrophone: () => Promise.resolve(),
+  disableMicrophone: () => Promise.resolve(),
+  clearMessages: () => {},
   disconnect: () => Promise.resolve(),
 });
 
@@ -70,24 +63,34 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
   const [room, setRoom] = useState<Room>();
   const [isConnected, setIsConnected] = useState(false);
   const [isAvatarSpeaking, setIsAvatarSpeaking] = useState(false);
+  const [transcriberStatus, setTranscriberStatus] = useState<TranscriberStatus>(
+    TranscriberStatus.Closed,
+  );
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   function handleDataReceived(data: Uint8Array) {
-    const parsedMessage: Message = JSON.parse(new TextDecoder().decode(data));
+    const message: ParsedMessage = JSON.parse(new TextDecoder().decode(data));
 
-    if (parsedMessage.type === MessageType.State) {
-      if (parsedMessage.data.state === MessageState.Speaking) {
-        setIsAvatarSpeaking(true);
-      } else {
-        setIsAvatarSpeaking(false);
-      }
-    }
-
-    if (parsedMessage.type === MessageType.Error) {
-      throw new Error('Error from server');
+    switch (message.type) {
+      case MessageType.State:
+        setIsAvatarSpeaking(message.data.state === MessageState.Speaking);
+        break;
+      case MessageType.Transcript:
+        onTranscriptionHandler(message.data);
+        break;
+      case MessageType.TranscriberState:
+        setTranscriberStatus(message.data.status);
+        break;
+      case MessageType.Error:
+        throw new Error('Error from server');
     }
   }
 
-  async function connect(avatarId?: number) {
+  async function connect(
+    avatarId?: number,
+    conversational?: boolean,
+    initialPrompt?: any,
+  ) {
     if (room && room.state !== 'disconnected') {
       return;
     }
@@ -125,6 +128,59 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
     await connect(avatarId);
   }
 
+  async function enableMicrophone() {
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (isConnected) {
+        room?.localParticipant?.setMicrophoneEnabled(true);
+      }
+    } catch (error) {
+      console.error('Error enabling conversational mode:', error);
+    }
+  }
+
+  async function disableMicrophone() {
+    if (isConnected) {
+      room?.localParticipant?.setMicrophoneEnabled(false);
+    }
+  }
+
+  function onTranscriptionHandler({
+    role,
+    message,
+    isFinal,
+  }: {
+    role: string;
+    message: string;
+    isFinal: boolean;
+  }) {
+    setMessages((prevMessages) => {
+      const lastIndex = prevMessages.length - 1;
+      const lastMessage = prevMessages[lastIndex];
+
+      if (role === lastMessage?.role) {
+        prevMessages = prevMessages.slice(0, lastIndex);
+
+        if (role === 'assistant' && !isFinal) {
+          message = lastMessage.content + message;
+        }
+      }
+
+      return [
+        ...prevMessages,
+        {
+          role,
+          content: message,
+          isFinal,
+        },
+      ];
+    });
+  }
+
+  function clearMessages() {
+    setMessages([]);
+  }
+
   async function disconnect() {
     await room?.disconnect();
     setRoom(undefined);
@@ -135,12 +191,17 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
       value={{
         client,
         room,
+        messages,
         isConnected,
         isAvatarSpeaking,
+        transcriberStatus,
         connect,
         say,
         stop,
         switchAvatar,
+        enableMicrophone,
+        disableMicrophone,
+        clearMessages,
         disconnect,
       }}>
       {children}

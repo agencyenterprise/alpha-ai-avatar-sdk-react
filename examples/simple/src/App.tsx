@@ -2,7 +2,16 @@ import { Avatar, useAvatar } from 'alpha-ai-avatar-sdk-react';
 import { Button } from './Button';
 
 export function App() {
-  const { room, isConnected, connect, say, stop, switchAvatar } = useAvatar();
+  const {
+    room,
+    isConnected,
+    connect,
+    disconnect,
+    say,
+    stop,
+    switchAvatar,
+    enableMicrophone,
+  } = useAvatar();
 
   return (
     <div
@@ -12,7 +21,7 @@ export function App() {
         flexDirection: 'column',
         gap: '20px',
       }}>
-      <Avatar style={{ borderRadius: '20px', width: 250, height: 250 }} />
+      <Avatar style={{ borderRadius: '20px', width: 512, height: 512 }} />
 
       <div style={{ display: 'flex', gap: '10px' }}>
         {room ? (
@@ -21,6 +30,10 @@ export function App() {
               <Button onClick={() => say('Hello, how are you?')}>Say</Button>
               <Button onClick={stop}>Stop Avatar</Button>
               <Button onClick={() => switchAvatar(4)}>Switch Avatar</Button>
+              <Button onClick={() => enableMicrophone()}>
+                Enable microphone
+              </Button>
+              <Button onClick={() => disconnect()}>Disconnect</Button>
             </>
           ) : (
             <p>Connecting...</p>
