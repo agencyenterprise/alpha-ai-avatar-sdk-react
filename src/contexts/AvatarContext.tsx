@@ -1,14 +1,16 @@
 import { Room, RoomEvent } from 'livekit-client';
 import { ReactNode, createContext, useState } from 'react';
-import { AvatarClient } from '../core/AvatarClient';
 import {
+  AvatarClient,
   MessageState,
   MessageType,
+} from 'alpha-ai-avatar-sdk-js';
+import {
   ParsedMessage,
   Prompt,
-  ChatMessage,
   TranscriberStatus,
-} from '../core/types';
+} from 'alpha-ai-avatar-sdk-js';
+import { ChatMessage } from '../core/types';
 
 type SayOptions = {
   voiceName?: string;
@@ -94,22 +96,12 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
     }
   }
 
-  async function connect(
-    avatarId?: number,
-    conversational?: boolean,
-    initialPrompt?: any,
-  ) {
+  async function connect(avatarId?: number) {
     if (room && room.state !== 'disconnected') {
       return;
     }
 
-    const newRoom = new Room({ adaptiveStream: true });
-    const { token, serverUrl } = await client.connect(
-      avatarId,
-      conversational,
-      initialPrompt,
-    );
-    newRoom.prepareConnection(token, serverUrl);
+    const newRoom = await client.connect(avatarId);
 
     newRoom
       .on(RoomEvent.Connected, () => {
@@ -121,7 +113,6 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
       });
 
     setRoom(newRoom);
-    newRoom.connect(serverUrl, token);
   }
 
   async function sendMessage(message: any) {

@@ -1,8 +1,9 @@
 // Types
-export * from './core/types';
+export * from 'alpha-ai-avatar-sdk-js';
+export type * from 'alpha-ai-avatar-sdk-js';
 
 // Classes
-export { AvatarClient } from './core/AvatarClient';
+export { AvatarClient } from 'alpha-ai-avatar-sdk-js';
 
 // Context
 export { AvatarProvider } from './contexts/AvatarContext';

@@ -1,6 +1,6 @@
 {
   "name": "alpha-ai-avatar-sdk-react",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Alpha AI Avatar SDK (React)",
   "main": "index.js",
   "module": "index.esm.js",
@@ -39,6 +39,7 @@
     "@testing-library/react": "^16.0.0",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.3",
+    "alpha-ai-avatar-sdk-js": "^0.0.16",
     "babel-eslint": "^10.1.0",
     "eslint": "9.x",
     "eslint-config-prettier": "^9.1.0",

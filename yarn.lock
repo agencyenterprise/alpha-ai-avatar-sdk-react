@@ -1913,6 +1913,11 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+alpha-ai-avatar-sdk-js@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/alpha-ai-avatar-sdk-js/-/alpha-ai-avatar-sdk-js-0.0.16.tgz#6d589fef32fe57cf71039a689fe0512246191301"
+  integrity sha512-BsBj1RVQ6R/+C/fjoWL/LNXURhmJ3g7nXy8NeX6Wl4wHh+JMAs0nHwppaBWfB4K8qSBZK1txXg/CVU8DlWn3tw==
+
 ansi-escapes@^4.2.1:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-4.3.2.tgz#6b2291d1db7d98b6521d5f1efa42d0f3a9feb65e"

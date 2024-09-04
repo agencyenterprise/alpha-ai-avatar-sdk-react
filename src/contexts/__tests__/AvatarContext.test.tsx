@@ -7,7 +7,7 @@ import {
   AvatarContextType,
   AvatarProvider,
 } from '../AvatarContext';
-import { AvatarClient } from '../../core/AvatarClient';
+import { AvatarClient } from 'alpha-ai-avatar-sdk-js';
 import { useAvatar } from '../../hooks/useAvatar';
 import { ReactNode } from 'react';
 
