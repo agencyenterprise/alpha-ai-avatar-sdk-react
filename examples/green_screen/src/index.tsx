@@ -5,7 +5,8 @@ import { App } from './App';
 import { AvatarClient, AvatarProvider } from 'alpha-ai-avatar-sdk-react';
 
 const client = new AvatarClient({
-  apiKey: 'API_KEY',
+  apiKey: '35Xgh80gfbFGRGfTn',
+  baseUrl: 'https://staging.avatar.alpha.school',
   conversational: true,
   initialPrompt: [
     {
