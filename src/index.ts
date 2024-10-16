@@ -13,3 +13,10 @@ export { useAvatar } from './hooks/useAvatar';
 
 // Components
 export * from './components/Avatar/Avatar';
+
+// AI-PI
+export { ConversationalAvatarController } from './core/ai-pi/ConversationalAvatarController';
+export { ManualAvatarController } from './core/ai-pi/ManualAvatarController';
+export { BaseAvatarController } from './core/ai-pi/BaseAvatarController';
+export * from './components/Avatar/ai-pi/ConversationalAvatarDisplay';
+export * from './components/Avatar/ai-pi/AvatarDisplay';
