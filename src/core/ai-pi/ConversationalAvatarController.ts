@@ -1,6 +1,13 @@
 import { BaseAvatarController } from './BaseAvatarController';
 
 export class ConversationalAvatarController extends BaseAvatarController {
+  constructor(config: any) {
+    super({
+      ...config,
+      conversational: true,
+    });
+  }
+
   updateSystemMessage(message: string) {
     this.avatarClient.say(message);
   }

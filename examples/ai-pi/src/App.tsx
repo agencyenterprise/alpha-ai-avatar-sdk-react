@@ -3,15 +3,15 @@ import {
   ConversationalAvatarDisplay,
 } from 'alpha-ai-avatar-sdk-react';
 
-// const avatarController = new ConversationalAvatarController({
-//   apiKey: 's76hu0jzWThfnscn',
-//   initialPrompt: [
-//     {
-//       role: 'system',
-//       content: 'Act like Albert Einstein',
-//     },
-//   ],
-// });
+const avatarController = new ConversationalAvatarController({
+  apiKey: 's76hu0jzWThfnscn',
+  initialPrompt: [
+    {
+      role: 'system',
+      content: 'Act like Albert Einstein',
+    },
+  ],
+});
 
 export function App() {
   return (
@@ -20,10 +20,11 @@ export function App() {
         display: 'flex',
         alignItems: 'center',
         flexDirection: 'column',
+        color: 'black',
         gap: '20px',
       }}>
-        hello
-      {/* <ConversationalAvatarDisplay avatarController={avatarController} /> */}
+      <p>conversational mode example</p>
+      <ConversationalAvatarDisplay avatarController={avatarController} />
     </div>
   );
 }

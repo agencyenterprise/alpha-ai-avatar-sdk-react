@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
 import { ManualAvatarController } from '../../../core/ai-pi/ManualAvatarController';
 import { ConversationalAvatarController } from '../../../core/ai-pi/ConversationalAvatarController';
+import { useEffect, useRef } from 'react';
 
 export interface AvatarDisplayProps {
   avatarController: ManualAvatarController | ConversationalAvatarController;

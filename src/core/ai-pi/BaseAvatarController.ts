@@ -5,6 +5,8 @@ export class BaseAvatarController {
 
   constructor(config: AvatarClientConfig) {
     this.avatarClient = new AvatarClient(config);
+
+    
   }
 
   stopSpeaking() {
