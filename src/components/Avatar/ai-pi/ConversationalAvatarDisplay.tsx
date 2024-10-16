@@ -28,7 +28,7 @@ export function ConversationalAvatarDisplay({
 
     avatarController.connect(videoRef.current, audioRef.current).then(() => {
       avatarController.avatarClient.addEventListener(
-        'transcript',
+        'transcription',
         onChatTranscriptUpdate,
       );
     });
@@ -36,7 +36,7 @@ export function ConversationalAvatarDisplay({
     return () => {
       avatarController.disconnect();
       avatarController.avatarClient.removeEventListener(
-        'transcript',
+        'transcription',
         onChatTranscriptUpdate,
       );
     };
