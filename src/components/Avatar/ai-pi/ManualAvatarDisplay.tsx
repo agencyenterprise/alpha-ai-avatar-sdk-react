@@ -34,6 +34,8 @@ export function ManualAvatarDisplay({
       <div className='aspect-square w-full relative'>
         <video
           ref={videoRef}
+          height={height}
+          width={width}
           autoPlay
           playsInline
           muted
