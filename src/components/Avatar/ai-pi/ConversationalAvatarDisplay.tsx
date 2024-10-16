@@ -1,6 +1,6 @@
 import { ManualAvatarController } from '../../../core/ai-pi/ManualAvatarController';
 import { ConversationalAvatarController } from '../../../core/ai-pi/ConversationalAvatarController';
-import { ParsedMessage } from 'alpha-ai-avatar-sdk-js';
+import { TranscriptMessage } from 'alpha-ai-avatar-sdk-js';
 import { useEffect, useRef } from 'react';
 
 export interface ConversationalAvatarDisplayProps {
@@ -8,7 +8,7 @@ export interface ConversationalAvatarDisplayProps {
   width?: number;
   height?: number;
   className?: string;
-  onChatTranscriptUpdate?: (message: ParsedMessage) => void;
+  onChatTranscriptUpdate?: (message: TranscriptMessage) => void;
 }
 
 export function ConversationalAvatarDisplay({

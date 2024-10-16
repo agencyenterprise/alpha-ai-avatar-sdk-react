@@ -21,7 +21,7 @@ export class ConversationalAvatarController extends BaseAvatarController {
     ]);
   }
 
-  setMicrophoneMuted(isMuted: boolean) {
+  setMicrophoneMute(isMuted: boolean) {
     if (isMuted) {
       this.avatarClient.disableMicrophone();
     } else {

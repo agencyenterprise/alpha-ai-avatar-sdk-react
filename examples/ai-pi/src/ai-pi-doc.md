@@ -73,10 +73,12 @@ import { ConversationalAvatarController } from 'alpha-ai-avatar-sdk-react';
 const App = () => {
     const avatarController = new ConversationalAvatarController({
         apiKey: 'YOUR_API_KEY',
-        initialConversationConfig: {
-            systemMessage: '', // instructions for how the avatar should respond to the user
-            conversationHistory: []
-        } as ConversationControllerConfig
+        initialPrompt: [
+            {
+                role: 'system',
+                content: 'Act like Albert Einstein',
+            },
+        ],
     });
     // .. rest of application ..
 ```
@@ -138,11 +140,25 @@ interface BaseAvatarDisplayProps {
    className?: string; // optional
 }
 
+declare enum MessageType {
+    Transcript = 0,
+    State = 1,
+    Error = 2,
+    TranscriberState = 3,
+    Landmarks = 4
+}
+
+type TranscriptMessage = {
+    data: {
+        message: string;
+        role: string;
+        isFinal: boolean;
+    };
+    type: MessageType.Transcript;
+};
+
 interface ConversationalAvatarDisplayProps extends BaseAvatarDisplayProps {
-    onChatTranscriptUpdate: (
-        updatedChunk: { chunkString: string, speaker: 'assistant' | 'user' }, 
-        fullTranscript: { text: string, speaker: 'assistant' | 'user' }[]
-    ) => void;
+    onChatTranscriptUpdate: (message: ParsedMessage) => void;
 }
 
 ```
