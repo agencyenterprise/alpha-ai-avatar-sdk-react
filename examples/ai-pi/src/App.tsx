@@ -1,94 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { ConversationalAvatarController, ConversationalAvatarDisplay } from 'alpha-ai-avatar-sdk-react';
-import { Box, Typography, Paper, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  ConversationalAvatarController,
+  ConversationalAvatarDisplay,
+} from 'alpha-ai-avatar-sdk-react';
+import { TextField, Button, Paper, Typography, Box } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
 
-interface ChatMessage {
-  text: string;
-  speaker: 'assistant' | 'user';
-}
-
-interface AlphaAISampleChatAppProps {
+interface ChatWithAvatarProps {
   apiKey?: string;
+  initialPrompt?: { role: string; content: string }[];
+  height?: number;
+  width?: number;
 }
 
-const AlphaAISampleChatApp: React.FC<AlphaAISampleChatAppProps> = ({ apiKey = 'YOUR_API_KEY' }) => {
-  const [chatTranscript, setChatTranscript] = useState<ChatMessage[]>([]);
-  const [isMicrophoneMuted, setIsMicrophoneMuted] = useState(false);
-
-  const avatarController = new ConversationalAvatarController({
-    apiKey,
-    initialConversationConfig: {
-      systemMessage: 'You are a helpful AI assistant.',
-      conversationHistory: [],
-    },
-  });
+export const App: React.FC<ChatWithAvatarProps> = ({
+  apiKey = 's76hu0jzWThfnscn',
+  initialPrompt = [{ role: 'system', content: 'Act like Albert Einstein' }],
+  height = 400,
+  width = 600,
+}) => {
+  const [avatarController, setAvatarController] =
+    useState<ConversationalAvatarController | null>(null);
+  const [transcript, setTranscript] = useState<string[]>([]);
+  const [userInput, setUserInput] = useState('');
+  const [isMicMuted, setIsMicMuted] = useState(false);
+  const transcriptRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Clean up the controller when the component unmounts
-    return () => {
-      avatarController.stopSpeaking();
-    };
-  }, []);
+    const controller = new ConversationalAvatarController({
+      apiKey,
+      initialPrompt,
+    });
+    setAvatarController(controller);
 
-  const handleChatTranscriptUpdate = (
-    updatedChunk: { chunkString: string; speaker: 'assistant' | 'user' },
-    fullTranscript: ChatMessage[]
-  ) => {
-    setChatTranscript(fullTranscript);
+    return () => {
+      controller.stopSpeaking();
+    };
+  }, [apiKey, initialPrompt]);
+
+  useEffect(() => {
+    if (transcriptRef.current) {
+      transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
+    }
+  }, [transcript]);
+
+  const handleUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(e.target.value);
+  };
+
+  const handleSendMessage = () => {
+    if (userInput.trim() && avatarController) {
+      setTranscript((prev) => [...prev, `You: ${userInput}`]);
+      setUserInput('');
+      // In a real implementation, you would send this input to the avatar for processing
+      // This is just a placeholder to simulate a response
+      setTimeout(() => {
+        setTranscript((prev) => [
+          ...prev,
+          `Avatar: This is a simulated response to "${userInput}"`,
+        ]);
+      }, 1000);
+    }
   };
 
   const toggleMicrophone = () => {
-    const newMuteState = !isMicrophoneMuted;
-    setIsMicrophoneMuted(newMuteState);
-    avatarController.setMicrophoneMute(newMuteState);
+    if (avatarController) {
+      avatarController.setMicrophoneMute(!isMicMuted);
+      setIsMicMuted(!isMicMuted);
+    }
+  };
+
+  const handleChatTranscriptUpdate = (message: any) => {
+    console.log(message);
+    if (message.type === 0 && message.data.isFinal) {
+      setTranscript((prev) => [
+        ...prev,
+        `${message.data.role}: ${message.data.message}`,
+      ]);
+    }
   };
 
   return (
-    <Box className="flex flex-col md:flex-row h-screen p-4 bg-gray-100">
-      <Box className="w-full md:w-1/2 mb-4 md:mb-0 md:pr-4">
-        <Paper elevation={3} className="h-full flex items-center justify-center">
+    <Paper className='p-4 max-w-2xl mx-auto'>
+      <Box className='mb-4'>
+        {avatarController && (
           <ConversationalAvatarDisplay
             avatarController={avatarController}
-            height={400}
-            width={400}
+            height={height}
+            width={width}
             onChatTranscriptUpdate={handleChatTranscriptUpdate}
+            className='mx-auto'
           />
-        </Paper>
+        )}
       </Box>
-      <Box className="w-full md:w-1/2">
-        <Paper elevation={3} className="h-full p-4 flex flex-col">
-          <Typography variant="h5" className="mb-4">
-            Chat Transcript
+      <Paper
+        ref={transcriptRef}
+        className='h-60 overflow-y-auto p-4 mb-4'
+        elevation={3}>
+        {transcript.map((message, index) => (
+          <Typography key={index} className='mb-2'>
+            {message}
           </Typography>
-          <List className="flex-grow overflow-auto">
-            {chatTranscript.map((message, index) => (
-              <ListItem key={index} className={`mb-2 ${message.speaker === 'user' ? 'justify-end' : ''}`}>
-                <Paper
-                  elevation={1}
-                  className={`p-2 max-w-3/4 ${
-                    message.speaker === 'user' ? 'bg-blue-100' : 'bg-green-100'
-                  }`}
-                >
-                  <ListItemText primary={message.text} />
-                </Paper>
-              </ListItem>
-            ))}
-          </List>
-          <Box className="mt-4 flex justify-center">
-            <IconButton onClick={toggleMicrophone} color={isMicrophoneMuted ? 'default' : 'primary'}>
-              {isMicrophoneMuted ? <MicOffIcon /> : <MicIcon />}
-            </IconButton>
-          </Box>
-        </Paper>
+        ))}
+      </Paper>
+      <Box className='flex items-center'>
+        <TextField
+          fullWidth
+          variant='outlined'
+          value={userInput}
+          onChange={handleUserInput}
+          placeholder='Type your message here...'
+          className='mr-2'
+        />
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={handleSendMessage}
+          className='mr-2'>
+          Send
+        </Button>
+        <Button
+          variant='contained'
+          color={isMicMuted ? 'secondary' : 'primary'}
+          onClick={toggleMicrophone}>
+          {isMicMuted ? <MicOffIcon /> : <MicIcon />}
+        </Button>
       </Box>
-    </Box>
+    </Paper>
   );
 };
-
-export default AlphaAISampleChatApp;
-
 // import {
 //   ConversationalAvatarController,
 //   ConversationalAvatarDisplay,

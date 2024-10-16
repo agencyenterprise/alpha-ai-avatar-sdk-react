@@ -26,11 +26,12 @@ export function ConversationalAvatarDisplay({
       return;
     }
 
-    avatarController.connect(videoRef.current, audioRef.current);
-    avatarController.avatarClient.addEventListener(
-      'transcript',
-      onChatTranscriptUpdate,
-    );
+    avatarController.connect(videoRef.current, audioRef.current).then(() => {
+      avatarController.avatarClient.addEventListener(
+        'transcript',
+        onChatTranscriptUpdate,
+      );
+    });
 
     return () => {
       avatarController.disconnect();
