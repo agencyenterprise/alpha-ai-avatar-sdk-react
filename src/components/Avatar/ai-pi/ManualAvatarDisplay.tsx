@@ -1,20 +1,19 @@
 import { ManualAvatarController } from '../../../core/ai-pi/ManualAvatarController';
-import { ConversationalAvatarController } from '../../../core/ai-pi/ConversationalAvatarController';
 import { useEffect, useRef } from 'react';
 
-export interface AvatarDisplayProps {
-  avatarController: ManualAvatarController | ConversationalAvatarController;
+export interface ManualAvatarDisplayProps {
+  avatarController: ManualAvatarController;
   width?: number;
   height?: number;
   className?: string;
 }
 
-export function AvatarDisplay({
+export function ManualAvatarDisplay({
   avatarController,
   width = 512,
   height = 512,
   className,
-}: AvatarDisplayProps) {
+}: ManualAvatarDisplayProps) {
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 

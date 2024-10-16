@@ -23,6 +23,6 @@ export {
   ConversationalAvatarDisplayProps,
 } from './components/Avatar/ai-pi/ConversationalAvatarDisplay';
 export {
-  AvatarDisplay,
-  AvatarDisplayProps,
-} from './components/Avatar/ai-pi/AvatarDisplay';
+  ManualAvatarDisplay,
+  ManualAvatarDisplayProps,
+} from './components/Avatar/ai-pi/ManualAvatarDisplay';
