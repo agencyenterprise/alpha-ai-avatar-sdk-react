@@ -33,10 +33,16 @@ export function ConversationalAvatarDisplay({
       return;
     }
 
+    const handleChatTranscriptUpdate = (message: ChatTranscriptMessage) => {
+      if (message.isFinal) {
+        onChatTranscriptUpdate(message);
+      }
+    };
+
     avatarController.connect(videoRef.current, audioRef.current).then(() => {
       avatarController.avatarClient.addEventListener(
         'transcription',
-        onChatTranscriptUpdate,
+        handleChatTranscriptUpdate,
       );
     });
 
@@ -44,18 +50,17 @@ export function ConversationalAvatarDisplay({
       avatarController.disconnect();
       avatarController.avatarClient.removeEventListener(
         'transcription',
-        onChatTranscriptUpdate,
+        handleChatTranscriptUpdate,
       );
     };
   }, []);
 
   return (
-    <div className={className}>
+    <div style={{ height, width }} className={className}>
       <div className='aspect-square w-full relative'>
         <video
           ref={videoRef}
           height={height}
-          width={width}
           autoPlay
           playsInline
           muted

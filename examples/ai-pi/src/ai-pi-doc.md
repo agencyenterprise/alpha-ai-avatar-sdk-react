@@ -144,7 +144,6 @@ type ChatTranscriptRole = 'user' | 'assistant';
 type ChatTranscriptMessage = {
   message: string;
   role: ChatTranscriptRole;
-  isFinal: boolean;
 };
 
 interface ConversationalAvatarDisplayProps extends BaseAvatarDisplayProps {
@@ -152,7 +151,3 @@ interface ConversationalAvatarDisplayProps extends BaseAvatarDisplayProps {
 }
 
 ```
-
-# Tips
-
-- You can use the `isFinal` boolean present on `ChatTranscriptMessage` to determine on the UX when the assistant or user has stopped speaking, you can use non `isFinal` messages to display a feedback that they still taking, eg: `..`.
