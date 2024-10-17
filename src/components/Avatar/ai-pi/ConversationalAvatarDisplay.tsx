@@ -1,14 +1,21 @@
 import { ManualAvatarController } from '../../../core/ai-pi/ManualAvatarController';
 import { ConversationalAvatarController } from '../../../core/ai-pi/ConversationalAvatarController';
-import { TranscriptMessage } from 'alpha-ai-avatar-sdk-js';
 import { useEffect, useRef } from 'react';
+
+export type ChatTranscriptRole = 'user' | 'assistant';
+
+export type ChatTranscriptMessage = {
+  message: string;
+  role: ChatTranscriptRole;
+  isFinal: boolean;
+};
 
 export interface ConversationalAvatarDisplayProps {
   avatarController: ManualAvatarController | ConversationalAvatarController;
   width?: number;
   height?: number;
   className?: string;
-  onChatTranscriptUpdate?: (message: TranscriptMessage) => void;
+  onChatTranscriptUpdate?: (message: ChatTranscriptMessage) => void;
 }
 
 export function ConversationalAvatarDisplay({
@@ -43,7 +50,7 @@ export function ConversationalAvatarDisplay({
   }, []);
 
   return (
-    <div style={{ width, height }} className={className}>
+    <div className={className}>
       <div className='aspect-square w-full relative'>
         <video
           ref={videoRef}
@@ -52,7 +59,7 @@ export function ConversationalAvatarDisplay({
           autoPlay
           playsInline
           muted
-          className='absolute inset-0 w-full h-full object-cover bg-gray-200'
+          className='absolute inset-0 w-full object-cover bg-gray-200'
         />
       </div>
       <audio muted ref={audioRef} style={{ display: 'none' }} autoPlay />

@@ -63,7 +63,6 @@ const App = () => {
     />
 ```
 
-
 ## Conversational Mode Setup
 
 ### Basic Setup of Conversational Controller & Display:
@@ -140,25 +139,20 @@ interface BaseAvatarDisplayProps {
    className?: string; // optional
 }
 
-declare enum MessageType {
-    Transcript = 0,
-    State = 1,
-    Error = 2,
-    TranscriberState = 3,
-    Landmarks = 4
-}
+type ChatTranscriptRole = 'user' | 'assistant';
 
-type TranscriptMessage = {
-    data: {
-        message: string;
-        role: string;
-        isFinal: boolean;
-    };
-    type: MessageType.Transcript;
+type ChatTranscriptMessage = {
+  message: string;
+  role: ChatTranscriptRole;
+  isFinal: boolean;
 };
 
 interface ConversationalAvatarDisplayProps extends BaseAvatarDisplayProps {
-    onChatTranscriptUpdate: (message: ParsedMessage) => void;
+    onChatTranscriptUpdate: (message: ChatTranscriptMessage) => void;
 }
 
 ```
+
+# Tips
+
+- You can use the `isFinal` boolean present on `ChatTranscriptMessage` to determine on the UX when the assistant or user has stopped speaking, you can use non `isFinal` messages to display a feedback that they still taking, eg: `..`.
