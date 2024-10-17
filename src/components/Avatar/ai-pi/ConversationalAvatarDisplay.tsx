@@ -59,8 +59,10 @@ export function ConversationalAvatarDisplay({
     <div style={{ height, width }} className={className}>
       <div className='aspect-square w-full relative'>
         <video
+          style={{
+            height,
+          }}
           ref={videoRef}
-          height={height}
           autoPlay
           playsInline
           muted

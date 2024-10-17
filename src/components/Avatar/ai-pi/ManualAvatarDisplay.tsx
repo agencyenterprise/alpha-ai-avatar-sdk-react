@@ -31,10 +31,13 @@ export function ManualAvatarDisplay({
 
   return (
     <div style={{ height, width }} className={className}>
-      <div className='aspect-square w-full relative'>
+      <div
+        className='aspect-square w-full relative'
+        style={{
+          height,
+        }}>
         <video
           ref={videoRef}
-          height={height}
           autoPlay
           playsInline
           muted
