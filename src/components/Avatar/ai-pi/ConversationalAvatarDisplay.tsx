@@ -56,20 +56,19 @@ export function ConversationalAvatarDisplay({
   }, []);
 
   return (
-    <div style={{ height, width }} className={className}>
-      <div className='aspect-square w-full relative'>
-        <video
-          style={{
-            height,
-          }}
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className='absolute inset-0 w-full object-cover bg-gray-200'
-        />
-      </div>
+    <>
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        className={className}
+        style={{
+          width,
+          height,
+        }}
+      />
       <audio muted ref={audioRef} style={{ display: 'none' }} autoPlay />
-    </div>
+    </>
   );
 }
