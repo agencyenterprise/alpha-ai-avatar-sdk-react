@@ -30,16 +30,15 @@ export function ManualAvatarDisplay({
   }, []);
 
   return (
-    <div style={{ width, height }} className={className}>
+    <div style={{ height, width }} className={className}>
       <div className='aspect-square w-full relative'>
         <video
           ref={videoRef}
           height={height}
-          width={width}
           autoPlay
           playsInline
           muted
-          className='absolute inset-0 w-full h-full object-cover bg-gray-200'
+          className='absolute inset-0 w-full object-cover bg-gray-200'
         />
       </div>
       <audio muted ref={audioRef} style={{ display: 'none' }} autoPlay />
