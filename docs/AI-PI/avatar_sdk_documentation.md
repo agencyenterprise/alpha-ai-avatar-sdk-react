@@ -58,13 +58,14 @@ Create a game of who wants to be a millionaire, where the avatar acts as the hos
 ```tsx
 const App = () => {
     // note: DO NOT USE `setAvatarController`, you must instantiate it here.
-    const [avatarController, setAvatarController] = new ManualAvatarController({apiKey: 'XX_AVATAR_API_KEY_XX'});
-    
-    // .. rest of application ..
+    const [avatarController, setAvatarController] = useState(new ManualAvatarController({apiKey: 'XX_AVATAR_API_KEY_XX'}));
 
+
+    // ... application code  ...
+    
     return (
-        // .. UI components ..
-        <ManualAvatarDisplay
+            // .. UI components ..
+        <ManualAvatarController
             avatarController={avatarController}
             /* All other props are OPTIONAL, start simple and add customization as needed */
         />
@@ -81,10 +82,8 @@ const App = () => {
 ```tsx
 import { ConversationalAvatarController } from 'alpha-ai-avatar-sk-react';
 const App = () => {
-    // note: DO NOT USE `setAvatarController`, you must instantiate it here.
-        new ManualAvatarController({apiKey: 'XX_AVATAR_API_KEY_XX'});
-    
 
+    // note: DO NOT USE `setAvatarController`, you must instantiate ManualAvatarController with useState for it to work properly
     const [avatarController, setAvatarController] =  useState(new ConversationalAvatarController({
         apiKey: 'XX_AVATAR_API_KEY_XX',
         initialPrompt: [
@@ -95,15 +94,15 @@ const App = () => {
         ],
     }));
 
-    // .. rest of application ..
-
+    // ... application code  ...
+    
     return (
+            // .. UI components ..
+        <ConversationalAvatarDisplay
+            avatarController={avatarController}
+            /* All other props are OPTIONAL, start simple and add customization as needed */
+        />
         // .. UI components ..
-    <ConversationalAvatarDisplay
-        avatarController={avatarController}
-        /* All other props are OPTIONAL, start simple and add customization as needed */
-    />
-    // .. UI components ..
     )
 ```
 
@@ -161,18 +160,19 @@ interface ManualAvatarDisplayProps extends BaseAvatarDisplayProps { }
 
 ```
 
-### Using GPT for Content Generation
+### Using GPT Api for Content Generation
 
 **DO NOT REQUEST JSON FORMAT, OR ANY FORMAT THAT REQUIRES PARSING. USE PLAIN TEXT RESPONSES ONLY.**
 
 ```tsx
-const generateQuestion = async (promptRules: string, promptRequest: string) => {
+// copy this function exactly, use when needed for content generation
+const getGptApiResponse = async (promptRules: string, promptRequest: string) => {
     const 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer XX_OPENAI_API_KEY_XX' },
         body: JSON.stringify({
-            model: "gpt-4o", // USE THIS MODEL ID EXACTLY
+            model: "gpt-4o", // USE THIS MODEL ID EXACTLY (gpt-4o)
             messages: [
             { role: "system", content: promptRules }
             { role: "user", content: promptRequest },
