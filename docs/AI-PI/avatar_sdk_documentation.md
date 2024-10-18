@@ -56,6 +56,7 @@ Create a game of who wants to be a millionaire, where the avatar acts as the hos
 - **Required `<ManualAvatarDisplay/>`**: Pass the avatar controller to the AvatarDisplay component as a prop.
 
 ```tsx
+import { ManualAvatarController, ManualAvatarDisplay } from 'alpha-ai-avatar-sk-react';
 const App = () => {
     // note: DO NOT USE `setAvatarController`, you must instantiate it here.
     const [avatarController, setAvatarController] = useState(new ManualAvatarController({apiKey: 'XX_AVATAR_API_KEY_XX'}));
@@ -65,7 +66,7 @@ const App = () => {
     
     return (
             // .. UI components ..
-        <ManualAvatarController
+        <ManualAvatarDisplay
             avatarController={avatarController}
             /* All other props are OPTIONAL, start simple and add customization as needed */
         />
@@ -80,7 +81,7 @@ const App = () => {
 
 - **Required `<ConversationalAvatar/>`**: Pass the avatar controller to the <ConversationalAvatar /> component as a prop.
 ```tsx
-import { ConversationalAvatarController } from 'alpha-ai-avatar-sk-react';
+import { ConversationalAvatarController, ConversationalAvatarDisplay } from 'alpha-ai-avatar-sk-react';
 const App = () => {
 
     // note: DO NOT USE `setAvatarController`, you must instantiate ManualAvatarController with useState for it to work properly
@@ -167,7 +168,6 @@ interface ManualAvatarDisplayProps extends BaseAvatarDisplayProps { }
 ```tsx
 // copy this function exactly, use when needed for content generation
 const getGptApiResponse = async (promptRules: string, promptRequest: string) => {
-    const 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer XX_OPENAI_API_KEY_XX' },
