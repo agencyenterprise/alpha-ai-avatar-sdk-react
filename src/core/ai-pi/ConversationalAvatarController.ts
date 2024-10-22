@@ -1,4 +1,5 @@
 import { BaseAvatarController } from './BaseAvatarController';
+import { SynthesizerOptions } from 'alpha-ai-avatar-sdk-js';
 
 export class ConversationalAvatarController extends BaseAvatarController {
   constructor(config: any) {
@@ -46,5 +47,9 @@ export class ConversationalAvatarController extends BaseAvatarController {
         resolve(null);
       }, 1500),
     );
+  }
+
+  speak(text: string, overrideVoice?: SynthesizerOptions) {
+    this.avatarClient.say(text, overrideVoice);
   }
 }
