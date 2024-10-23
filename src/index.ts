@@ -26,5 +26,6 @@ export {
   ManualAvatarDisplay,
   ManualAvatarDisplayProps,
 } from './components/Avatar/ai-pi/ManualAvatarDisplay';
+export { Chat } from './components/Avatar/ai-pi/Chat';
 export type * from './components/Avatar/ai-pi/ConversationalAvatarDisplay';
 export type * from './components/Avatar/ai-pi/ManualAvatarDisplay';

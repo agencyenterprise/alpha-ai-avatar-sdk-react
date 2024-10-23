@@ -16,11 +16,18 @@ type ChatTranscriptMessage = {
   isFinal: boolean;
 };
 
-export interface ChatProps {
+export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   avatarController: ConversationalAvatarController;
+  userName?: string;
+  assistantName?: string;
 }
 
-export function Chat({ avatarController }: ChatProps) {
+export function Chat({
+  avatarController,
+  userName = 'You',
+  assistantName = 'Alpha AI',
+  ...containerProps
+}: ChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -70,18 +77,59 @@ export function Chat({ avatarController }: ChatProps) {
     };
   }, []);
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollTo({
+      top: messagesEndRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
-    <>
+    <div
+      {...containerProps}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        maxWidth: '512px',
+        maxHeight: '300px',
+        overflowY: 'auto',
+        ...containerProps?.style,
+      }}>
       <div>
         {messages.map((message) => (
           <div
             key={message.id}
-            className={message.role === 'user' ? 'user' : 'assistant'}>
-            {message.content || '...'}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginBottom: '10px',
+            }}>
+            <div
+              style={{
+                fontWeight: 'bold',
+                marginBottom: '5px',
+                alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+              }}>
+              {message.role === 'user' ? userName : assistantName}
+            </div>
+            <div
+              style={{
+                padding: '10px',
+                borderRadius: '10px',
+                maxWidth: '60%',
+                margin: '5px 0',
+                alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
+                backgroundColor:
+                  message.role === 'user' ? '#dcf8c6' : '#f1f0f0',
+                textAlign: message.role === 'user' ? 'right' : 'left',
+              }}>
+              {message.content || '...'}
+            </div>
           </div>
         ))}
       </div>
       <div ref={messagesEndRef} />
-    </>
+    </div>
   );
 }
