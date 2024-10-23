@@ -78,10 +78,7 @@ export function Chat({
   }, []);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollTo({
-      top: messagesEndRef.current.scrollHeight,
-      behavior: 'smooth',
-    });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   return (
@@ -128,8 +125,8 @@ export function Chat({
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
-      <div ref={messagesEndRef} />
     </div>
   );
 }
