@@ -183,3 +183,11 @@ const getGptApiResponse = async (promptRules: string, promptRequest: string) => 
     return data.choices[0].message.content.trim()
 };
 ```
+
+### Using Chat to display messages from conversational mode
+
+```tsx
+import { Chat } from 'alpha-ai-avatar-sdk-react';
+
+<Chat avatarController={avatarController} avatarName="XX_AVATAR_NAME_XX" />
+```
