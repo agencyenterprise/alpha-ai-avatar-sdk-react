@@ -18,14 +18,14 @@ type ChatTranscriptMessage = {
 
 export interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   avatarController: ConversationalAvatarController;
-  userName?: string;
-  avatarName?: string;
+  userDisplayName?: string;
+  avatarDisplayName?: string;
 }
 
 export function Chat({
   avatarController,
-  userName = 'You',
-  avatarName = 'Alpha AI',
+  userDisplayName = 'You',
+  avatarDisplayName = 'Alpha AI',
   ...containerProps
 }: ChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -108,7 +108,7 @@ export function Chat({
                 marginBottom: '5px',
                 alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start',
               }}>
-              {message.role === 'user' ? userName : avatarName}
+              {message.role === 'user' ? userDisplayName : avatarDisplayName}
             </div>
             <div
               style={{

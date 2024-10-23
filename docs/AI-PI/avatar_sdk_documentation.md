@@ -189,5 +189,5 @@ const getGptApiResponse = async (promptRules: string, promptRequest: string) => 
 ```tsx
 import { Chat } from 'alpha-ai-avatar-sdk-react';
 
-<Chat avatarController={avatarController} avatarName="XX_AVATAR_NAME_XX" />
+<Chat avatarController={avatarController} avatarDisplayName="XX_AVATAR_NAME_XX" userDisplayName="You" />
 ```
