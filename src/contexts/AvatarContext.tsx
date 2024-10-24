@@ -41,6 +41,7 @@ export type AvatarContextType = {
   say: (message: string, options?: SayOptions) => Promise<void>;
   stop: () => Promise<void>;
   switchAvatar: (avatarId: number) => Promise<void>;
+  sendConversationalMessage: (message: string) => void;
   enableMicrophone: () => Promise<void>;
   disableMicrophone: () => Promise<void>;
   clearMessages: () => void;
@@ -58,6 +59,7 @@ const AvatarContext = createContext<AvatarContextType>({
   say: () => Promise.resolve(),
   stop: () => Promise.resolve(),
   switchAvatar: () => Promise.resolve(),
+  sendConversationalMessage: () => {},
   enableMicrophone: () => Promise.resolve(),
   disableMicrophone: () => Promise.resolve(),
   clearMessages: () => {},
@@ -130,8 +132,11 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
   }
 
   async function switchAvatar(avatarId: number) {
-    await disconnect();
-    await connect(avatarId);
+    client.switchAvatar(avatarId);
+  }
+
+  function sendConversationalMessage(message: string) {
+    client.sendConversationalMessage(message);
   }
 
   async function enableMicrophone() {
@@ -205,6 +210,7 @@ function AvatarProvider({ children, client }: AvatarProviderProps) {
         say,
         stop,
         switchAvatar,
+        sendConversationalMessage,
         enableMicrophone,
         disableMicrophone,
         clearMessages,
