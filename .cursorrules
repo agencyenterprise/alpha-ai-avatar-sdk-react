@@ -1,0 +1,36 @@
+# General
+Always use functional React.
+Never use or import `useEffect`.
+Only use tailwind for styling
+Use simple basic styling unless the user asks specifically for UI/UX design
+
+# Imports
+Components should be stored in `aipi-applications/<app>/src/components/`.
+Functions should be stored in `aipi-applications/<app>/src/lib/`.
+Types/Interfaces should be stored in `aipi-applications/<app>/src/types/`.
+Replace <app> with the application the user is currently working on.
+
+# Application Setup
+Applications use `create-react-app` and typescript. They are run with `npm start`.
+The Application starting point is `aipi-applications/<app>/src/App.tsx`.
+
+# Environment Variables
+Never update the `.env` unless specifically told to do so
+Always use process.env.REACT_APP_<variable> to access environment variables
+- REACT_APP_ALPHA_AVATAR_API_KEY
+- REACT_APP_OPEN_AI_API_KEY
+
+# OpenAI Setup
+You must always initialize OpenAI inside of the component and pass it these exact variables:
+```tsx
+import OpenAI from "openai";
+
+const App: React.FC = () => {
+  const openai = new OpenAI({ apiKey: process.env.REACT_APP_OPEN_AI_API_KEY, dangerouslyAllowBrowser: true });
+  //...
+```
+
+Always use the model `gpt-4o` when calling openai functions
+```tsx
+model: "gpt-4o"
+```

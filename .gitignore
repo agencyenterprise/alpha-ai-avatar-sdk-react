@@ -2,3 +2,13 @@ node_modules
 dist
 
 yarn-error.log
+
+# Ignore everything in the aipi-applications directory
+aipi-applications/*
+
+# But do not ignore the aipi-application-template directory
+!/aipi-applications/aipi-application-template/
+
+# Include everything under the aipi-application-template directory
+!/aipi-applications/aipi-application-template/**
+/aipi-applications/aipi-application-template/node_modules/**
